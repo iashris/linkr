@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>Merchant Check Out Page</title>
+</head>
+<body>
+<% if (restdata == 'true') { 	%>
+	<center><h1>validation succesfull</h1></center>
+     <%     }else
+          { 	%>
+            <center><h1>validation unsuccesfull</h1></center>
+       <%  }	%>
+		<form method="post" name="f1"> 
+		<table border="1">
+			<tbody>
+			<tr>
+					<th>Label</th>
+					<th>Value</th>
+				</tr>
+
+			<% for (name in paramlist) {
+			%>
+
+				<tr>
+					<td><label><%= name %></label></td>
+					<td><input id='<%= name %>'tabindex="1" maxlength="30" size="30"
+						name='<%= name %>' autocomplete="off"
+						value='<%= paramlist[name] %>'>
+					</td>
+				</tr>
+				<!-- <input type="label" name='<%= name %>' value='<%= paramlist[name] %>'>
+				</br> -->
+			<%}%>
+			</tbody>
+		</table>
+		<script type="text/javascript">
+			//document.f1.submit();
+		</script>
+	</form>
+</body>
+</html>
