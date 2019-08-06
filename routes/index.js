@@ -25,16 +25,19 @@ router.get("/", function(req, res) {
 });
 
 router.get("/r/:id", async (req, res) => {
-  const { id } = req.params;
-  const document = await db
-    .collection("links")
-    .doc(id)
-    .get();
-  if (!document.exists) {
-    return res.end("Invalid Link");
-  }
-  const { price, title } = document.data();
-  res.render("redeem.ejs", { price, title, id });
+  //TODO: Undo comment
+  // const { id } = req.params;
+  // const document = await db
+  //   .collection("links")
+  //   .doc(id)
+  //   .get();
+  // if (!document.exists) {
+  //   return res.end("Invalid Link");
+  // }
+  // const { price, title } = document.data();
+  // res.render("redeem.ejs", { price, title, id });
+
+  res.render("redeem.ejs", { price: 600, title: "Hello Ramanto Magazine", id: "WDRG" });
 });
 
 router.post("/r", async (req, res) => {

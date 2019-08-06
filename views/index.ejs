@@ -10,17 +10,153 @@
     rel="stylesheet"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
   />
+  <link href="/main.css" rel="stylesheet" type="text/css" />
   <style></style>
   <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="#">makersgully</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarText"
+          aria-controls="navbarText"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <button class="btn btn-outline-primary" href="#">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
-      <form
-        class="mt-5 p-3"
-        style="max-width: 900px; margin: auto; background: #efefef; border-radius: 5px;"
-        id="form1"
-        method="post"
-      >
+      <div class="row">
+        <div class="col hero center">
+          <h2>Monetize your digital products instantly</h2>
+          <p class="tagline">
+            Use Makersgully platform to monetize any URL and track your sales.
+          </p>
+          <input
+            type="url"
+            id="link"
+            name="link"
+            aria-describedby="linkHelp"
+            placeholder="URL you want to monetize"
+          />
+          <button id="monetize" data-toggle="modal" data-target="#configure">Set up</button>
+          <div class="modal fade" id="configure" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Final Step</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="form-group">
+                          <label for="link">Title for your link.</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="title"
+                            name="title"
+                            value="Film Script"
+                            aria-describedby="titleHelp"
+                            placeholder="Document Title"
+                          />
+                          <small id="titleHelp" class="form-text text-muted">Please ensure your link works.</small>
+                        </div>
+                        <div class="form-group mt-4">
+                            <label for="price"
+                              >Set the price to unlock the link.</label
+                            >
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">₹</span>
+                              </div>
+                
+                              <input
+                                type="number"
+                                class="form-control"
+                                name="price"
+                                id="price"
+                                placeholder="Price"
+                              />
+                            </div>
+                          </div>
+                          <div class="form-group mt-4">
+                            <label for="paytm">Your PayTM phone number / UPI</label>
+                            <div class="input-group">
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="paytm"
+                                name="paytm"
+                                placeholder="PayTM / UPI"
+                              />
+                            </div>
+                            <small id="titleHelp" class="form-text text-muted">We only service India right now.</small>
+                          </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submit">Generate Link</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="genlinkmodal" tabindex="-1" role="dialog" aria-labelledby="genlinkmodal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Your link is ready! </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="genlink"></div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+      </div>
+      <div class="row banner">
+        <div class="col-md-3 center">
+          <img class="img-fluid" src="/drive.png" />
+          <p>Charge your clients for the soft copy of your designs [Google Drive link]</p>
+        </div>
+        <div class="col-md-3 center">
+          <img class="img-fluid" src="/yt.png" />
+          <p>Share your upcoming short film with your fans [YouTube video link]</p>
+        </div>
+        <div class="col-md-3 center">
+          <img class="img-fluid" src="/docs.png" />
+          <p>Sell your class notes/slides before an examination [Google Docs link]</p>
+        </div>
+        <div class="col-md-3 center">
+          <img class="img-fluid" src="/sheets.png" />
+          <p>Take orders for advertising on your blog [Google Forms link]</p>
+        </div>
+      </div>
+      <!-- <form class="mt-5 p-3" style="max-width: 900px; margin: auto;" id="form1" method="post">
         <div class="form-group">
-          <label for="link">Enter the link you want to monetize.</label>
+          <label for="link"
+            ><span class="green">01. </span>Enter the link you want to monetize.</label
+          >
           <input
             type="url"
             class="form-control"
@@ -30,12 +166,10 @@
             aria-describedby="linkHelp"
             placeholder="https://example.com"
           />
-          <small id="linkHelp" class="form-text text-muted"
-            >Please ensure your link works.</small
-          >
+          <small id="linkHelp" class="form-text text-muted">Please ensure your link works.</small>
         </div>
         <div class="form-group">
-          <label for="link">Title for your link.</label>
+          <label for="link"><span class="green">02. </span>Title for your link.</label>
           <input
             type="text"
             class="form-control"
@@ -45,13 +179,13 @@
             aria-describedby="titleHelp"
             placeholder="Document Title"
           />
-          <small id="titleHelp" class="form-text text-muted"
-            >Please ensure your link works.</small
-          >
+          <small id="titleHelp" class="form-text text-muted">Please ensure your link works.</small>
         </div>
         <div class="row">
           <div class="form-group col-md-6 col-xs-12">
-            <label for="price">Set the price to unlock the link.</label>
+            <label for="price"
+              ><span class="green">03. </span>Set the price to unlock the link.</label
+            >
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon3">₹</span>
@@ -67,7 +201,7 @@
             </div>
           </div>
           <div class="form-group col-md-6 col-xs-12">
-            <label for="paytm">Your PayTM phone number.</label>
+            <label for="paytm"><span class="green">04. </span>Your PayTM phone number.</label>
             <div class="input-group">
               <input
                 type="number"
@@ -90,21 +224,25 @@
             </button>
           </div>
         </div>
-      </form>
-      <div class="row mt-3" style="font-size:3em;text-align:center">
-        <div class="col" id="genlink"></div>
-      </div>
+      </form> -->
     </div>
   </body>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
   <script
-    type="text/javascript"
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"
   ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"
+  ></script>
+
   <script type="text/javascript">
-    $(document).ready(function() {
-      $("#form1").submit(function(event) {
-        event.preventDefault();
+
+      $("#submit").click((event)=> {
+        $("#submit").html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...`);
         var data = {
           link: document.getElementById("link").value,
           price: document.getElementById("price").value,
@@ -112,10 +250,11 @@
           title: document.getElementById("title").value
         };
         $.post("/", data, function(resp) {
-          alert(resp);
-          $("#genlink").html("http://localhost:3001/r/" + resp);
+          $("#submit").html(`Generate Link`);
+          $('#configure').modal('hide');
+          $("#genlink").html(`<a href="http://localhost:3001/r/${resp}">http://localhost:3001/r/${resp}</a>`);
+          $("#genlinkmodal").modal('show');
         });
       });
-    });
   </script>
 </html>

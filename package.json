@@ -30,9 +30,9 @@
   "scripts": {
     "start": "node app",
     "server": "babel-node app",
-    "dev": "NODE_ENV=development npm run server",
+    "dev": "npm run server",
     "build": "babel ./src --out-dir dist",
-    "prod": "NODE_ENV=production npm run build server:prod",
+    "prod": "npm run build server:prod",
     "watch": "nodemon"
   }
 }
