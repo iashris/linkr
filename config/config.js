@@ -15,7 +15,8 @@ const config = {
   hostname: {
     test: "securegw-stage.paytm.in",
     prod: "securegw.paytm.in"
-  }
+  },
+  app_url: "http://localhost:3000"
 };
 const merchant_id = config.merchant_id[env];
 const merchant_key = config.merchant_key[env];

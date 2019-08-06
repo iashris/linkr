@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
         .doc(doc_id)
         .get();
       if (document.exists) {
-        res.end(`<h2>Yay! Here's the link: ${document.data().link} </h2>`);
+        res.render(`<h2>Yay! Here's the link: ${document.data().link} </h2>`);
       } else {
         res.end("There is no such doc only.");
       }

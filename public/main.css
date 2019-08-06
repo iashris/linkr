@@ -105,3 +105,38 @@ button:focus {
 .banner {
   margin-top: 80px;
 }
+.propbanner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: auto;
+  height: calc(100vh - 62px);
+  color: white;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 900;
+  background: #ee0979; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #ff6a00, #ee0979); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ff6a00,
+    #ee0979
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.propbanner > h4 {
+  text-align: center;
+}
+#paythis {
+  background: white;
+  border: none;
+  color: #ee0979;
+  display: inline-block;
+  transition: all 0.2s ease-in-out;
+  border-radius: 8px;
+  font-size: 16px;
+  margin: 25px 0px;
+  height: 56px;
+  line-height: 20px;
+  padding: 8px 24px;
+}

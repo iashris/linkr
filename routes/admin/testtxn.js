@@ -20,7 +20,7 @@ router.post("/", function(req, res) {
     }
   }
   console.log(paramarray);
-  paramarray["CALLBACK_URL"] = "http://localhost:3000/response"; // in case if you want to send callback
+  paramarray["CALLBACK_URL"] = `${config.app_url}/complete`; // in case if you want to send callback
   console.log(PAYTM_MERCHANT_KEY);
   checksum.genchecksum(paramarray, PAYTM_MERCHANT_KEY, function(err, result) {
     console.log(result);

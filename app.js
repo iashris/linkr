@@ -21,15 +21,15 @@ app.use(
 );
 
 server.listen(3001, function() {
-  var host = server.address().address;
-  var port = server.address().port;
+  var host = server.address();
+  var port = server.address();
   console.log("Example app listening at http://%s:%s", host, port);
 });
 
 app.use("/", indexRoute);
 app.use("/testtxn", testRoute);
 app.use("/pgredirect", pageRedirectRoute);
-app.use("/response", responseRoute);
+app.use("/complete", responseRoute);
 
 app.use(express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views");
