@@ -38,8 +38,8 @@
     </nav>
     <div>
       <div class="propbanner">
-        <span>Unlock <%=title %></span>
-        <button class="btn btn-primary" id="paythis" onClick="proceed()">Pay ₹<%= price%></button>
+        <span>Could not unlock <%= title %></span>
+        <p><%= reason%></p>
       </div>
     </div>
   </body>
@@ -53,12 +53,4 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"
   ></script>
-  <script type="text/javascript">
-    function proceed() {
-      console.log("Hey");
-      $.post("/r", { id: "<%= id %>" }, function(resp) {
-        document.write(resp);
-      });
-    }
-  </script>
 </html>

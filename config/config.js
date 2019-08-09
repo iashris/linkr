@@ -15,15 +15,15 @@ const config = {
   hostname: {
     test: "securegw-stage.paytm.in",
     prod: "securegw.paytm.in"
-  },
-  app_url: "http://localhost:3000"
+  }
 };
 const merchant_id = config.merchant_id[env];
 const merchant_key = config.merchant_key[env];
 const paytm_url = config.paytm_url[env];
 const hostname = config.hostname[env];
-var website = "DEFAULT";
-var industry = "Retail";
+const app_url = "http://localhost:3001";
+const website = "DEFAULT";
+const industry = "Retail";
 
 module.exports = {
   merchant_id,
@@ -31,5 +31,6 @@ module.exports = {
   paytm_url,
   website,
   industry,
-  hostname
+  hostname,
+  app_url
 };

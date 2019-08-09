@@ -25,19 +25,19 @@ router.get("/", function(req, res) {
 });
 
 router.get("/r/:id", async (req, res) => {
-  //TODO: Undo comment
-  // const { id } = req.params;
-  // const document = await db
-  //   .collection("links")
-  //   .doc(id)
-  //   .get();
-  // if (!document.exists) {
-  //   return res.end("Invalid Link");
-  // }
-  // const { price, title } = document.data();
-  // res.render("redeem.ejs", { price, title, id });
+  // TODO: Undo comment
+  const { id } = req.params;
+  const document = await db
+    .collection("links")
+    .doc(id)
+    .get();
+  if (!document.exists) {
+    return res.end("Invalid Link");
+  }
+  const { price, title } = document.data();
+  res.render("redeem.ejs", { price, title, id });
 
-  res.render("redeem.ejs", { price: 600, title: "Hello Ramanto Magazine", id: "bollywood" });
+  //res.render("redeem.ejs", { price: 600, title: "Hello Ramanto Magazine", id: "bollywood" });
 });
 
 router.post("/r", async (req, res) => {
@@ -71,7 +71,7 @@ router.post("/r", async (req, res) => {
     }
   }
 
-  paramarray["CALLBACK_URL"] = `${config.app_url}/response`; // in case if you want to send callback
+  paramarray["CALLBACK_URL"] = `${config.app_url}/complete`; // in case if you want to send callback
   checksum.genchecksum(paramarray, PAYTM_MERCHANT_KEY, function(err, result) {
     console.log("Done!!!");
     return res.render("pgredirect.ejs", {
