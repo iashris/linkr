@@ -13,29 +13,7 @@
   <link href="/main.css" rel="stylesheet" type="text/css" />
   <style></style>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-        <a class="navbar-brand" href="#">makersgully</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <button class="btn btn-outline-primary" href="#">Login</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <%- include partials/navbar.ejs %>
 
     <div class="container">
       <div class="row">
@@ -52,86 +30,106 @@
             placeholder="URL you want to monetize"
           />
           <button id="monetize" data-toggle="modal" data-target="#configure">Set up</button>
-          <div class="modal fade" id="configure" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Final Step</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
+          <div
+            class="modal fade"
+            id="configure"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Final Step</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="link">Title for your link.</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="title"
+                      name="title"
+                      value="Film Script"
+                      aria-describedby="titleHelp"
+                      placeholder="Document Title"
+                    />
+                    <small id="titleHelp" class="form-text text-muted"
+                      >Please ensure your link works.</small
+                    >
                   </div>
-                  <div class="modal-body">
-                      <div class="form-group">
-                          <label for="link">Title for your link.</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="title"
-                            name="title"
-                            value="Film Script"
-                            aria-describedby="titleHelp"
-                            placeholder="Document Title"
-                          />
-                          <small id="titleHelp" class="form-text text-muted">Please ensure your link works.</small>
-                        </div>
-                        <div class="form-group mt-4">
-                            <label for="price"
-                              >Set the price to unlock the link.</label
-                            >
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon3">₹</span>
-                              </div>
-                
-                              <input
-                                type="number"
-                                class="form-control"
-                                name="price"
-                                id="price"
-                                placeholder="Price"
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group mt-4">
-                            <label for="paytm">Your PayTM phone number / UPI</label>
-                            <div class="input-group">
-                              <input
-                                type="number"
-                                class="form-control"
-                                id="paytm"
-                                name="paytm"
-                                placeholder="PayTM / UPI"
-                              />
-                            </div>
-                            <small id="titleHelp" class="form-text text-muted">We only service India right now.</small>
-                          </div>
+                  <div class="form-group mt-4">
+                    <label for="price">Set the price to unlock the link.</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">₹</span>
+                      </div>
+
+                      <input
+                        type="number"
+                        class="form-control"
+                        name="price"
+                        id="price"
+                        placeholder="Price"
+                      />
+                    </div>
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="submit">Generate Link</button>
+                  <div class="form-group mt-4">
+                    <label for="paytm">Your PayTM phone number / UPI</label>
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="paytm"
+                        name="paytm"
+                        placeholder="PayTM / UPI"
+                      />
+                    </div>
+                    <small id="titleHelp" class="form-text text-muted"
+                      >We only service India right now.</small
+                    >
                   </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-primary" id="submit">Generate Link</button>
                 </div>
               </div>
             </div>
-            <div class="modal fade" id="genlinkmodal" tabindex="-1" role="dialog" aria-labelledby="genlinkmodal" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Your link is ready! </h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="genlink"></div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
+          </div>
+          <div
+            class="modal fade"
+            id="genlinkmodal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="genlinkmodal"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Your link is ready!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="genlink"></div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                  </button>
                 </div>
               </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="row banner">
@@ -227,7 +225,7 @@
       </form> -->
     </div>
   </body>
-  
+
   <script
     src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -240,21 +238,24 @@
   ></script>
 
   <script type="text/javascript">
-
-      $("#submit").click((event)=> {
-        $("#submit").html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...`);
-        var data = {
-          link: document.getElementById("link").value,
-          price: document.getElementById("price").value,
-          paytm: document.getElementById("paytm").value,
-          title: document.getElementById("title").value
-        };
-        $.post("/", data, function(resp) {
-          $("#submit").html(`Generate Link`);
-          $('#configure').modal('hide');
-          $("#genlink").html(`<a href="http://localhost:3001/r/${resp}">http://localhost:3001/r/${resp}</a>`);
-          $("#genlinkmodal").modal('show');
-        });
+    $("#submit").click(event => {
+      $("#submit").html(
+        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...`
+      );
+      var data = {
+        link: document.getElementById("link").value,
+        price: document.getElementById("price").value,
+        paytm: document.getElementById("paytm").value,
+        title: document.getElementById("title").value
+      };
+      $.post("/", data, function(resp) {
+        $("#submit").html(`Generate Link`);
+        $("#configure").modal("hide");
+        $("#genlink").html(
+          `<a href="http://localhost:3001/r/${resp}">http://localhost:3001/r/${resp}</a>`
+        );
+        $("#genlinkmodal").modal("show");
       });
+    });
   </script>
 </html>

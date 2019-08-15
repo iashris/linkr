@@ -15,10 +15,11 @@ router.post("/", async (req, res) => {
     .collection("links")
     .doc(doc_id)
     .get();
-  if(!document.exists){
+  if (!document.exists) {
     res.render("complete-failure.ejs", {
-      title,
-      reason: "URL is not configured properly. Kindly get in touch with us if your money was deducted, we shall refund it."
+      title: order_id,
+      reason:
+        "URL is not configured properly. Kindly get in touch with us if your money was deducted, we shall refund it."
     });
   }
   const { title, link } = document.data();
@@ -31,7 +32,7 @@ router.post("/", async (req, res) => {
         reason: "Reason: " + paramlist.RESPMSG
       });
     } else {
-        res.render("complete-success.ejs", { title, link });
+      res.render("complete-success.ejs", { title, link });
     }
     //res.render("response.ejs", { restdata: "true", paramlist: paramlist });
   } else {
@@ -43,4 +44,5 @@ router.post("/", async (req, res) => {
   }
 });
 
+//TODO register result somewhere
 module.exports = router;

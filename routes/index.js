@@ -91,7 +91,7 @@ router.post("/", async (req, res) => {
     .get();
   const final_id = document.exists ? id + "-" + guidGenerator() : id;
   const ref = db.collection("links").doc(final_id);
-  ref.set({ price, link, paytm, title, time: getTimeStamp() });
+  ref.set({ price, link, paytm, title, time: getTimeStamp(), user: "guest" });
   res.send(final_id);
 });
 
