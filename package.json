@@ -3,10 +3,11 @@
   "description": "login backend module",
   "version": "0.0.1",
   "engines": {
-    "node": "0.10.24",
+    "node": "10.16",
     "npm": "2.14.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.5.5",
     "async": "^1.5.2",
     "body-parser": "^1.15.0",
     "cookie-parser": "^1.4.1",
@@ -24,15 +25,16 @@
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "nodemon": "^1.19.1"
   },
   "scripts": {
-    "start": "node app",
     "server": "babel-node app",
     "dev": "npm run server",
-    "build": "babel ./src --out-dir dist",
-    "prod": "npm run build server:prod",
-    "watch": "nodemon"
+    "clean": "node rimraf build && mkdir build",
+    "build-babel": "babel -d ./build ./src -s --copy-files",
+    "build": "npm run clean && npm run build-babel",
+    "start": "npm run build && node ./build/app.js"
   }
 }

@@ -30,4 +30,4 @@ router.post("/", function(req, res) {
   console.log("POST Order end");
 });
 //vidisha
-module.exports = router;
+export default router;

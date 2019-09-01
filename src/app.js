@@ -19,11 +19,10 @@ app.use(
     extended: true
   })
 );
-
-server.listen(3001, function() {
+const port = process.env.PORT || 8080;
+server.listen(port, function() {
   var host = server.address();
-  var port = server.address();
-  console.log("Example app listening at http://%s:%s", host, port);
+  console.log("Example app listening at ", port);
 });
 
 app.use("/", indexRoute);

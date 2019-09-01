@@ -45,4 +45,4 @@ router.post("/", async (req, res) => {
 });
 
 //TODO register result somewhere
-module.exports = router;
+export default router;

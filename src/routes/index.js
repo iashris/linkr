@@ -95,4 +95,4 @@ router.post("/", async (req, res) => {
   res.send(final_id);
 });
 
-module.exports = router;
+export default router;
