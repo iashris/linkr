@@ -21,7 +21,7 @@ function getTimeStamp() {
   return Math.floor(new Date().getTime() / 1000);
 }
 router.get("/", function(req, res) {
-  res.render("index.ejs");
+  res.render("index.ejs", { hhh: process.env.APP_URL || "our" });
 });
 
 router.get("/r/:id", async (req, res) => {
