@@ -21,7 +21,7 @@ const merchant_id = config.merchant_id[env];
 const merchant_key = config.merchant_key[env];
 const paytm_url = config.paytm_url[env];
 const hostname = config.hostname[env];
-const app_url = "http://localhost:3001";
+const app_url = "http://localhost:3000";
 const website = "DEFAULT";
 const industry = "Retail";
 

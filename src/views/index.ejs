@@ -20,7 +20,7 @@
         <div class="col hero center">
           <h2>Monetize your digital products instantly</h2>
           <p class="tagline">
-            Use <%= hhh %> platform to monetize any URL and track your sales.
+            Use Makersgully platform to monetize any URL and track your sales.
           </p>
           <input
             type="url"
@@ -251,9 +251,7 @@
       $.post("/", data, function(resp) {
         $("#submit").html(`Generate Link`);
         $("#configure").modal("hide");
-        $("#genlink").html(
-          `<a href="http://localhost:3001/r/${resp}">http://localhost:3001/r/${resp}</a>`
-        );
+        $("#genlink").html(`<a href="<%= app_url %>/r/${resp}"><%= app_url %>/r/${resp}</a>`);
         $("#genlinkmodal").modal("show");
       });
     });
