@@ -3,7 +3,7 @@
   "description": "login backend module",
   "version": "0.0.1",
   "engines": {
-    "node": "10.16",
+    "node": "10.x",
     "npm": "2.14.0"
   },
   "dependencies": {
