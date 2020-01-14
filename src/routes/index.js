@@ -95,4 +95,8 @@ router.post("/", async (req, res) => {
   res.send(final_id);
 });
 
+router.get("/activate", async (req, res) => {
+  res.end("Alright!");
+});
+
 export default router;
