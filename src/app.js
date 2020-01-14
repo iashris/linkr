@@ -1,4 +1,3 @@
-require('newrelic');
 import express from "express";
 import redirect from "express-redirect";
 import bodyParser from "body-parser";
