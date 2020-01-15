@@ -6,7 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Makersgully</title>
   </head>
-  <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap"
+    rel="stylesheet"
+  />
   <link
     rel="stylesheet"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -30,7 +33,9 @@
             aria-describedby="linkHelp"
             placeholder="URL you want to monetize"
           />
-          <button id="monetize" data-toggle="modal" data-target="#configure">Set up</button>
+          <button id="monetize" data-toggle="modal" data-target="#configure">
+            Set up
+          </button>
           <div
             class="modal fade"
             id="configure"
@@ -43,63 +48,93 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title">Final Step</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
                   <div class="form-group">
-                    <label for="link">Title for your link.</label>
+                    <label for="link">Link Title</label>
                     <input
                       type="text"
                       class="form-control"
                       id="title"
                       name="title"
-                      value="Film Script"
+                      value=""
                       aria-describedby="titleHelp"
-                      placeholder="Document Title"
+                      placeholder="My Amazing Short Story"
                     />
-                    <small id="titleHelp" class="form-text text-muted"
+                    <!-- <small id="titleHelp" class="form-text text-muted"
                       >Please ensure your link works.</small
-                    >
+                    > -->
                   </div>
-                  <div class="form-group mt-4">
-                    <label for="price">Set the price to unlock the link.</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon3">₹</span>
-                      </div>
+                  <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea
+                      class="form-control"
+                      id="description"
+                      rows="6"
+                    ></textarea>
+                  </div>
+                  <div class="form-row form-group">
+                    <div class="col">
+                      <label for="price">Unlock Price</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon3"
+                            >₹</span
+                          >
+                        </div>
 
-                      <input
-                        type="number"
-                        class="form-control"
-                        name="price"
-                        id="price"
-                        placeholder="Price"
-                      />
+                        <input
+                          type="number"
+                          class="form-control"
+                          name="price"
+                          id="price"
+                          placeholder="Price"
+                        />
+                      </div>
+                    </div>
+                    <div class="col">
+                      <label for="paytm">UPI/PayTM</label>
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="paytm"
+                          name="paytm"
+                          placeholder="PayTM / UPI"
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div class="form-group mt-4">
-                    <label for="paytm">Your PayTM phone number / UPI</label>
-                    <div class="input-group">
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="paytm"
-                        name="paytm"
-                        placeholder="PayTM / UPI"
-                      />
-                    </div>
-                    <small id="titleHelp" class="form-text text-muted"
-                      >We only service India right now.</small
-                    >
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                      class="form-control"
+                      id="email"
+                    ></input>
                   </div>
+                  <small id="titleHelp" class="form-text text-muted"
+                    >We only service India right now.</small
+                  >
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
                     Close
                   </button>
-                  <button type="button" class="btn btn-primary" id="submit">Generate Link</button>
+                  <button type="button" class="btn btn-primary" id="submit">
+                    Generate Link
+                  </button>
                 </div>
               </div>
             </div>
@@ -115,8 +150,15 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Your link is ready!</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    Your link is ready!
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
@@ -124,7 +166,11 @@
                   <div id="genlink"></div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
                     Close
                   </button>
                 </div>
@@ -136,94 +182,29 @@
       <div class="row banner">
         <div class="col-md-3 center">
           <img class="img-fluid" src="/drive.png" />
-          <p>Charge your clients for the soft copy of your designs [Google Drive link]</p>
+          <p>
+            Charge your clients for the soft copy of your designs [Google Drive
+            link]
+          </p>
         </div>
         <div class="col-md-3 center">
           <img class="img-fluid" src="/yt.png" />
-          <p>Share your upcoming short film with your fans [YouTube video link]</p>
+          <p>
+            Share your upcoming short film with your fans [YouTube video link]
+          </p>
         </div>
         <div class="col-md-3 center">
           <img class="img-fluid" src="/docs.png" />
-          <p>Sell your class notes/slides before an examination [Google Docs link]</p>
+          <p>
+            Sell your class notes/slides before an examination [Google Docs
+            link]
+          </p>
         </div>
         <div class="col-md-3 center">
           <img class="img-fluid" src="/sheets.png" />
           <p>Take orders for advertising on your blog [Google Forms link]</p>
         </div>
       </div>
-      <!-- <form class="mt-5 p-3" style="max-width: 900px; margin: auto;" id="form1" method="post">
-        <div class="form-group">
-          <label for="link"
-            ><span class="green">01. </span>Enter the link you want to monetize.</label
-          >
-          <input
-            type="url"
-            class="form-control"
-            id="link"
-            name="link"
-            value="https://example.com"
-            aria-describedby="linkHelp"
-            placeholder="https://example.com"
-          />
-          <small id="linkHelp" class="form-text text-muted">Please ensure your link works.</small>
-        </div>
-        <div class="form-group">
-          <label for="link"><span class="green">02. </span>Title for your link.</label>
-          <input
-            type="text"
-            class="form-control"
-            id="title"
-            name="title"
-            value="Film Script"
-            aria-describedby="titleHelp"
-            placeholder="Document Title"
-          />
-          <small id="titleHelp" class="form-text text-muted">Please ensure your link works.</small>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6 col-xs-12">
-            <label for="price"
-              ><span class="green">03. </span>Set the price to unlock the link.</label
-            >
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon3">₹</span>
-              </div>
-
-              <input
-                type="number"
-                class="form-control"
-                name="price"
-                id="price"
-                placeholder="Price"
-              />
-            </div>
-          </div>
-          <div class="form-group col-md-6 col-xs-12">
-            <label for="paytm"><span class="green">04. </span>Your PayTM phone number.</label>
-            <div class="input-group">
-              <input
-                type="number"
-                class="form-control"
-                id="paytm"
-                name="paytm"
-                placeholder="PayTM Phone Number"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col" style="text-align:center">
-            <button
-              type="submit"
-              class="btn btn-primary my-3"
-              style="border-radius:500px; padding: 5px 40px;"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-      </form> -->
     </div>
   </body>
 
@@ -247,12 +228,16 @@
         link: document.getElementById("link").value,
         price: document.getElementById("price").value,
         paytm: document.getElementById("paytm").value,
-        title: document.getElementById("title").value
+        title: document.getElementById("title").value,
+        email:document.getElementById("email").value,
+        description: document.getElementById("description").value
       };
       $.post("/", data, function(resp) {
         $("#submit").html(`Generate Link`);
         $("#configure").modal("hide");
-        $("#genlink").html(`<a href="<%= app_url %>/r/${resp}"><%= app_url %>/r/${resp}</a>`);
+        $("#genlink").html(
+          `<a href="<%= app_url %>/r/${resp}"><%= app_url %>/r/${resp}</a>`
+        );
         $("#genlinkmodal").modal("show");
       });
     });

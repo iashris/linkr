@@ -1,3 +1,63 @@
+<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-auth.js"></script>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCZgqIUN6CcwLrLOroo_mWv172W42me_Ds",
+    authDomain: "makersgully.firebaseapp.com",
+    databaseURL: "https://makersgully.firebaseio.com",
+    projectId: "makersgully",
+    storageBucket: "makersgully.appspot.com",
+    messagingSenderId: "522214830535",
+    appId: "1:522214830535:web:3d7123acc0515a5678a9e2",
+    measurementId: "G-S4838SQV0F"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+<script>
+var provider = new firebase.auth.GoogleAuthProvider();
+provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    console.log('User exists')
+    // User is signed in.
+    var displayName = user.displayName;
+    var email = user.email;
+    var emailVerified = user.emailVerified;
+    var photoURL = user.photoURL;
+    var isAnonymous = user.isAnonymous;
+    var uid = user.uid;
+    var providerData = user.providerData;
+    // ...
+  } else {
+    console.log('User does not exist')
+    // User is signed out.
+    // ...
+  }
+});
+function googleSignIn(){
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+  // This gives you a Google Access Token. You can use it to access the Google API.
+  var token = result.credential.accessToken;
+  // The signed-in user info.
+  var user = result.user;
+  console.log(token,user)
+}).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // The email of the user's account used.
+  var email = error.email;
+  // The firebase.auth.AuthCredential type that was used.
+  var credential = error.credential;
+  console.log(errorCode,errorMessage)
+  // ...
+});
+}
+</script>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
     <a class="navbar-brand" href="/">makersgully</a>

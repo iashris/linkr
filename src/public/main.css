@@ -12,10 +12,8 @@ body {
   background: white !important;
 }
 label {
-  font-weight: 700;
-  font-size: 18px;
-  color: #777;
-  letter-spacing: 1.1;
+  font-weight: 400;
+  font-size: 14px;
 }
 .green {
   color: #5340ff;
@@ -85,17 +83,16 @@ button:focus {
 .banner {
   margin-top: 80px;
 }
+.interaction{
+  max-width: 700px;
+}
 .propbanner {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: auto;
   height: calc(100vh - 62px);
   color: white;
-  text-align: center;
-  font-size: 28px;
-  font-weight: 900;
   background: #ee0979; /* fallback for old browsers */
   background: -webkit-linear-gradient(to right, #ff6a00, #ee0979); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
@@ -103,6 +100,15 @@ button:focus {
     #ff6a00,
     #ee0979
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.interaction>.title{
+  font-size: 28px;
+  font-weight: 700;
+}
+.interaction>.description{
+  margin-top:15px;
+  font-size: 14px;
+  font-weight: 400;
 }
 .propbanner > h4 {
   text-align: center;
@@ -119,4 +125,18 @@ button:focus {
   height: 56px;
   line-height: 20px;
   padding: 8px 24px;
+}
+.modal-content{
+  text-align: left;
+}
+.form-group{
+  font-size: 14px!important;
+}
+textarea:focus,input.form-control:focus{
+  outline:0px!important;
+  -webkit-appearance:none;
+    box-shadow: none !important;
+}
+.topoffset{
+  margin-top:80px;
 }

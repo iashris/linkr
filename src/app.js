@@ -2,6 +2,7 @@ import express from "express";
 import redirect from "express-redirect";
 import bodyParser from "body-parser";
 import http from "http";
+import favicon from 'serve-favicon';
 
 import testRoute from "./routes/admin/testtxn";
 import pageRedirectRoute from "./routes/admin/pgredirect";
@@ -24,6 +25,7 @@ server.listen(port, function() {
   var host = server.address();
   console.log("Example app listening at ", port);
 });
+app.use(favicon(__dirname + '/public/favicon.ico'));
 
 app.use("/", indexRoute);
 app.use("/testtxn", testRoute);

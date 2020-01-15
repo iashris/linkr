@@ -34,8 +34,8 @@ router.get("/r/:id", async (req, res) => {
   if (!document.exists) {
     return res.end("Invalid Link");
   }
-  const { price, title } = document.data();
-  res.render("redeem.ejs", { price, title, id });
+  const { price, title, description } = document.data();
+  res.render("redeem.ejs", { price, title, id, description });
 
   //res.render("redeem.ejs", { price: 600, title: "Hello Ramanto Magazine", id: "bollywood" });
 });
@@ -83,7 +83,7 @@ router.post("/r", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { price, link, paytm, title } = req.body;
+  const { price, link, paytm, title, description, email } = req.body;
   const id = titleToId(title);
   const document = await db
     .collection("links")
@@ -91,12 +91,20 @@ router.post("/", async (req, res) => {
     .get();
   const final_id = document.exists ? id + "-" + guidGenerator() : id;
   const ref = db.collection("links").doc(final_id);
-  ref.set({ price, link, paytm, title, time: getTimeStamp(), user: "guest" });
+  ref.set({ price, link, paytm, title, email,description, time: getTimeStamp(), user: "guest" });
   res.send(final_id);
 });
 
 router.get("/activate", async (req, res) => {
   res.end("Alright!");
+});
+
+router.get("/privacy", function(req, res) {
+  res.render("privacy.ejs");
+});
+
+router.get("/terms", function(req, res) {
+  res.render("tos.ejs");
 });
 
 export default router;
