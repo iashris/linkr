@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Makersgully</title>
+  </head>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  />
+  <link href="/main.css" rel="stylesheet" type="text/css" />
+  <style></style>
+  <body>
+    <%- include partials/navbar.ejs %>
+    <div class="container topoffset">
+      <div class="row">
+        <div class="col-md-4">
+          <h4>Total Earnings</h4>
+          <h2 id="totalEarnings"></h2>
+        </div>
+      </div>
+      <table class="table table-bordered topoffset">
+        <thead>
+          <tr>
+            <th scope="col">Link</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Email</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody id="linksTable"></tbody>
+        <div id="warn">
+          <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+          </div>
+        </div>
+      </table>
+    </div>
+  </body>
+  <%- include partials/auth.ejs %>
+  <script>
+    const myLinks = {};
+    const init = async () => {
+      if (!localStorage.getItem("mkid")) {
+        window.location.href = "/";
+      }
+      const user = JSON.parse(localStorage.getItem("mkid"));
+      foo = await firebase
+        .firestore()
+        .collection("transactions")
+        .where("uid", "==", user.uid)
+        .where("status", "==", "TXN_SUCCESS")
+        .get();
+      if (foo.empty) {
+        $("#warn").html("No transactions found.");
+      } else {
+        $("#warn").html("");
+        foo.forEach(doc => {
+          const { buyer, buyerName, price, time } = doc.data();
+          myLinks[doc.id] = doc.data();
+          $("#linksTable:last-child").append(`
+                <tr>
+                    <td><a href="https://makersgully.com/r/${doc.id}">${doc.id}</a></td>
+                    <td>${buyerName}</td>
+                    <td>${buyer}</td>
+                    <td>${price}</td>
+                </tr>
+            `);
+        });
+        const totalEarnings = Object.values(myLinks).reduce(
+          (a, b) => a + Number(b.price),
+          0
+        );
+        $("#totalEarnings").html("₹ " + totalEarnings);
+      }
+    };
+    init();
+
+    function openEdit(id) {
+      const { title, price, link, description } = myLinks[id];
+      $("#title").val(title);
+      $("#secret").val(link);
+      $("#price").val(price);
+      $("#editDocID").val(id);
+      $("#description").val(description);
+      $("#editModal").modal("show");
+    }
+    function openDelete(id) {
+      $("#deleteDocID").val(id);
+      $("#deleteModal").modal("show");
+    }
+    function saveEdit() {
+      const title = $("#title").val();
+      const secret = $("#secret").val();
+      const price = $("#price").val();
+      const editDocID = $("#editDocID").val();
+      const description = $("#description").val();
+
+      const data = { title, secret, price, editDocID, description };
+
+      $.ajax({
+        type: "POST",
+        url: "/updateLink",
+        data,
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).done(function(resp) {
+        if (resp === "OK") {
+          window.location.reload();
+        }
+      });
+    }
+    function confirmDelete() {
+      const deleteDocID = $("#deleteDocID").val();
+      $.ajax({
+        type: "POST",
+        url: "/deleteLink",
+        data: { id: deleteDocID },
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).done(function(resp) {
+        if (resp === "OK") {
+          window.location.reload();
+        }
+      });
+    }
+  </script>
+</html>

@@ -1,13 +1,14 @@
 import express from "express";
 const router = express.Router();
-import db from "../config/firebase";
+import admin from "../config/firebase";
 import config from "../config/config";
 import checksum from "../model/checksum";
+import {checkIfAuthenticated} from "../middlewares/auth";
+
 const titleToId = title => {
   const id = title
     .toLowerCase()
     .replace(/\W/g, "-")
-    .substring(0, 15);
   return id;
 };
 
@@ -18,7 +19,7 @@ function guidGenerator() {
   return S4();
 }
 function getTimeStamp() {
-  return Math.floor(new Date().getTime() / 1000);
+  return Math.floor(new Date().getTime());
 }
 router.get("/", function(req, res) {
   res.render("index.ejs", { app_url: config.app_url });
@@ -27,7 +28,7 @@ router.get("/", function(req, res) {
 router.get("/r/:id", async (req, res) => {
   // TODO: Undo comment
   const { id } = req.params;
-  const document = await db
+  const document = await admin.firestore()
     .collection("links")
     .doc(id)
     .get();
@@ -42,18 +43,30 @@ router.get("/r/:id", async (req, res) => {
 
 router.post("/r", async (req, res) => {
   console.log("Its starting");
-  const { id } = req.body;
-  const document = await db
+  const { id, buyer, buyerName } = req.body;
+  const document = await admin.firestore()
     .collection("links")
     .doc(id)
     .get();
   if (!document.exists) {
     return res.end("Invalid Link");
   }
-  const { price } = document.data();
-
+  const { price, uid, email } = document.data();
+  const transaction_id = guidGenerator() + guidGenerator();
+  const newTransaction = admin.firestore().collection('transactions')
+  .doc(id+"-IIP-"+transaction_id);
+  const transaction_data = {
+    buyer,
+    email,
+    uid,
+    price,
+    buyerName,
+    status:'PENDING',
+    time:getTimeStamp(),
+  }
+  await newTransaction.set(transaction_data,{merge:true})
   var paramObj = {
-    ORDER_ID: id + "-IIP-" + guidGenerator() + guidGenerator(),
+    ORDER_ID: id + "-IIP-" + transaction_id,
     CUST_ID: "GUEST",
     INDUSTRY_TYPE_ID: config.industry,
     CHANNEL_ID: "WEB",
@@ -82,18 +95,65 @@ router.post("/r", async (req, res) => {
   console.log("POST Order end");
 });
 
-router.post("/", async (req, res) => {
-  const { price, link, paytm, title, description, email } = req.body;
+router.post("/", checkIfAuthenticated, async (req, res) => {
+  const {name,email,uid} = req.user;
+  const { price, link, title, description } = req.body;
   const id = titleToId(title);
-  const document = await db
+  const document = await admin.firestore()
     .collection("links")
     .doc(id)
     .get();
   const final_id = document.exists ? id + "-" + guidGenerator() : id;
-  const ref = db.collection("links").doc(final_id);
-  ref.set({ price, link, paytm, title, email,description, time: getTimeStamp(), user: "guest" });
+  const ref = admin.firestore().collection("links").doc(final_id);
+  const toSend = { price, link, title,description, time: getTimeStamp(), name,email, uid };
+  console.log('Sending ',toSend)
+  ref.set(toSend);
   res.send(final_id);
 });
+
+router.post("/updateSettings", checkIfAuthenticated, async (req, res) => {
+  const {name,email,uid} = req.user;
+  const { method, ID } = req.body;
+  const ref = await admin.firestore()
+    .collection("users")
+    .doc(uid);
+  const toSend = { method, ID };
+  console.log('Sending ',toSend)
+  ref.set(toSend,{merge:true});
+  res.send("OK");
+});
+
+router.post("/updateLink", checkIfAuthenticated, async (req, res) => {
+  const {name,email,uid} = req.user;
+  const {title,secret,price,editDocID,description} = req.body;
+  const ref = await admin.firestore()
+    .collection("links")
+    .doc(editDocID);
+  ref.set({title,secret,price,description},{merge:true});
+  res.send("OK");
+});
+
+router.post("/deleteLink", checkIfAuthenticated, async (req, res) => {
+  const {name,email,uid} = req.user;
+  const {id} = req.body;
+  const ref = admin.firestore()
+    .collection("links")
+    .doc(id);
+  
+  const requestedDoc = await ref.get();
+  if(!requestedDoc.exists){
+    res.end("BROKE")
+  }
+  const this_uid = requestedDoc.data().uid;
+  if(this_uid===uid){
+    ref.delete();
+    res.send("OK");
+  }
+  else{
+    console.log(id,this_uid,uid);
+  }
+});
+
 
 router.get("/activate", async (req, res) => {
   res.end("Alright!");
@@ -105,6 +165,18 @@ router.get("/privacy", function(req, res) {
 
 router.get("/terms", function(req, res) {
   res.render("tos.ejs");
+});
+
+router.get("/dashboard", async (req, res) => {
+res.render('dashboard.ejs')
+});
+
+router.get("/settings", function(req, res) {
+  res.render("settings.ejs");
+});
+
+router.get("/transactions", function(req, res) {
+  res.render("transactions.ejs");
 });
 
 export default router;

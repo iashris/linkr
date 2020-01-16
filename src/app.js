@@ -5,9 +5,11 @@ import http from "http";
 import favicon from 'serve-favicon';
 
 import testRoute from "./routes/admin/testtxn";
+import testsRoute from "./routes/admin/test";
 import pageRedirectRoute from "./routes/admin/pgredirect";
 import responseRoute from "./routes/admin/response";
 import indexRoute from "./routes/index";
+import adminRoute from "./routes/admin/admin";
 var app = express();
 redirect(app);
 
@@ -31,6 +33,8 @@ app.use("/", indexRoute);
 app.use("/testtxn", testRoute);
 app.use("/pgredirect", pageRedirectRoute);
 app.use("/complete", responseRoute);
+app.use("/test",testsRoute);
+app.use("/admin",adminRoute);
 
 app.use(express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views");

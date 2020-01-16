@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Makersgully</title>
+  </head>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  />
+  <link href="/main.css" rel="stylesheet" type="text/css" />
+  <style></style>
+  <body>
+    <%- include partials/navbar.ejs %>
+    <div class="container topoffset">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Link</th>
+            <th scope="col">Title</th>
+            <th scope="col">Price</th>
+            <th scope="col">Secret</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody id="linksTable"></tbody>
+        <div id="warn">
+          <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+          </div>
+        </div>
+      </table>
+
+      <div
+        class="modal fade"
+        id="editModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="editModal"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Edit Link
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="link">Title</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="title"
+                  name="title"
+                  value=""
+                  aria-describedby="titleHelp"
+                  placeholder=""
+                />
+                <!-- <small id="titleHelp" class="form-text text-muted"
+                >Please ensure your link works.</small
+              > -->
+              </div>
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                  class="form-control"
+                  id="description"
+                  rows="4"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="price">Unlock Price</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon3">₹</span>
+                  </div>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="price"
+                    id="price"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+              <div style="display:none" id="editDocID"></div>
+              <div class="form-group">
+                <label for="secret">Secret</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="secret"
+                  name="title"
+                  value=""
+                  aria-describedby="titleHelp"
+                  placeholder=""
+                />
+                <!-- <small id="titleHelp" class="form-text text-muted"
+                  >Please ensure your link works.</small
+                > -->
+              </div>
+              <small id="titleHelp" class="form-text text-muted"
+                >We only service India right now.</small
+              >
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="saveEdit()"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="deleteModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="deleteModal"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">
+                Delete Link
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div style="display:none" id="deleteDocID"></div>
+            <div class="modal-body">
+              <div>Are you sure you want to delete this link?</div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                onclick="confirmDelete()"
+              >
+                Delete
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <%- include partials/auth.ejs %>
+  <script>
+    const myLinks = {};
+    const init = async () => {
+      if (!localStorage.getItem("mkid")) {
+        window.location.href = "/";
+      }
+      const user = JSON.parse(localStorage.getItem("mkid"));
+      foo = await firebase
+        .firestore()
+        .collection("links")
+        .where("uid", "==", user.uid)
+        .get();
+      console.log(foo);
+      if (foo.empty) {
+        console.log("emp");
+        $("#warn").html("No projects found.");
+      } else {
+        $("#warn").html("");
+        foo.forEach(doc => {
+          const { description, title, price, link, time } = doc.data();
+          myLinks[doc.id] = doc.data();
+          $("#linksTable:last-child").append(`
+                    <tr>
+                        <td>
+                            <a href="https://makersgully.com/r/${doc.id}">${doc.id}</a>
+                        </td>
+                        <td>${title}</td>
+                        <td>₹ ${price}</td>
+                        <td><a href="${link}">${$.trim(link).substring(0, 25).trim(this) + "..."}</a></td>
+                        <td style="display:none;">${description}</td>
+                        <td><button class="btn btn-primary" onclick="openEdit('${doc.id}')">Edit</button>
+                        <button class="btn btn-danger"  onclick="openDelete('${doc.id}')">Delete</button></td>
+                    </tr>
+                `);
+        });
+      }
+    };
+    init();
+
+    function openEdit(id) {
+      const { title, price, link, description } = myLinks[id];
+      $("#title").val(title);
+      $("#secret").val(link);
+      $("#price").val(price);
+      $("#editDocID").val(id);
+      $("#description").val(description);
+      $("#editModal").modal("show");
+    }
+    function openDelete(id) {
+      $("#deleteDocID").val(id);
+      $("#deleteModal").modal("show");
+    }
+    function saveEdit() {
+      const title = $("#title").val();
+      const secret = $("#secret").val();
+      const price = $("#price").val();
+      const editDocID = $("#editDocID").val();
+      const description = $("#description").val();
+
+      const data = { title, secret, price, editDocID, description };
+
+      $.ajax({
+        type: "POST",
+        url: "/updateLink",
+        data,
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).done(function(resp) {
+        if (resp === "OK") {
+          window.location.reload();
+        }
+      });
+    }
+    function confirmDelete() {
+      const deleteDocID = $("#deleteDocID").val();
+      $.ajax({
+        type: "POST",
+        url: "/deleteLink",
+        data: {id:deleteDocID},
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).done(function(resp) {
+        if (resp === "OK") {
+          window.location.reload();
+        }
+      });
+    }
+  </script>
+</html>

@@ -1,0 +1,68 @@
+<script>
+  
+    var provider = new firebase.auth.GoogleAuthProvider();
+
+  function updateValues() {
+    // console.log('update called',localStorage.getItem("mkid"));
+    if (localStorage.getItem("mkid")) {
+      const user = JSON.parse(localStorage.getItem("mkid"));
+      $("#navbarDropdown").html(user.displayName.split(" ")[0]);
+      $("#loggedInDropdown").css("display","block");
+      $("#ifLoggedIn").html(`<input
+          type="url"
+          id="link"
+          name="link"
+          aria-describedby="linkHelp"
+          placeholder="URL you want to monetize"
+        />
+        <button class="classico" data-toggle="modal" data-target="#configure" id="setup" disabled>
+          Set up
+        </button>`);
+    } else {
+      $("#loggedInDropdown").css("display","none");
+      $("#ifLoggedIn").html(`
+      <button class="classico" onclick="googleSignConditional()">
+          Start My Page
+        </button>
+      `);
+    }
+  }
+  updateValues();
+  function googleSignConditional() {
+    if (!firebase.auth().currentUser) {
+      googleSignIn();
+    }
+  }
+  
+  function googleSignOut() {
+    firebase
+      .auth()
+      .signOut()
+      .then(
+        function() {
+          localStorage.removeItem("mkid");
+          updateValues();
+        },
+        function(error) {
+          console.log("Error happens in logout");
+        }
+      );
+  }
+  
+  function googleSignIn() {
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const { accessToken, idToken } = result.credential;
+        const user = result.user;
+        localStorage.setItem("mkid", JSON.stringify(user));
+        updateValues();
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log( errorMessage);
+      });
+  }
+  </script>

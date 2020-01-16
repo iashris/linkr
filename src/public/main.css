@@ -41,6 +41,7 @@ h6 {
 button:focus {
   outline: 0;
 }
+
 #link {
   padding: 16px 24px;
   max-width: 482px;
@@ -56,11 +57,14 @@ button:focus {
   color: #676e8b;
   background: #f4f6f8;
   margin: auto;
+  margin-bottom: 30px;
+}
+#ifLoggedIn{
   margin-top: 30px;
   margin-bottom: 20px;
 }
 
-#monetize {
+.classico {
   background: #5340ff;
   border: none;
   color: #fff;
@@ -72,6 +76,9 @@ button:focus {
   height: 56px;
   line-height: 20px;
   padding: 8px 24px;
+}
+.classico:disabled{
+  background: #676e8b;
 }
 .center > img {
   width: 60%;
@@ -139,4 +146,48 @@ textarea:focus,input.form-control:focus{
 }
 .topoffset{
   margin-top:80px;
+}
+.spinner {
+  margin: 100px auto 0;
+  width: 70px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #b8a89a;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
+td{
+  vertical-align: middle!important;
 }

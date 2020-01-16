@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Makersgully</title>
+  </head>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  />
+  <link href="/main.css" rel="stylesheet" type="text/css" />
+  <style></style>
+  <body>
+    <%- include partials/navbar.ejs %>
+    <div class="container topoffset">
+        <div id="loading">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+      <form id="settingsForm" style="display: none;">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="Name">Name</label>
+            <input type="text" class="form-control" id="Name" readonly />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="email">Email</label>
+            <input type="email" readonly class="form-control" id="email" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="method">State</label>
+            <select id="method" class="form-control">
+              <option selected value="default">Choose...</option>
+              <option value="paytm">PayTM Number</option>
+              <option value="tez">GoogleTez Number</option>
+              <option value="upi">UPI</option>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="ID">ID/Number</label>
+            <input type="text" class="form-control" id="ID" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </div>
+  </body>
+  <%- include partials/auth.ejs %>
+  <script>
+    $("#settingsForm").submit(function(e) {
+      e.preventDefault();
+      const method = $("#method").val();
+      const ID = $("#ID").val() || "";
+      $.ajax({
+        type: "POST",
+        url: "/updateSettings",
+        data: {method, ID},
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).done(function(resp) {
+        if(resp==="OK"){
+            alert("All done.")
+        }
+      });
+    });
+    const init = async () => {
+      if (!localStorage.getItem("mkid")) {
+        window.location.href = "/";
+      }
+      const user = JSON.parse(localStorage.getItem("mkid"));
+      $("#email").val(user.email);
+      $("#Name").val(user.displayName);
+      const foo = await firebase.firestore().collection('users').doc(user.uid).get();
+
+          const {method="default", ID=""} = foo.data();
+          $("#method").val(method)
+          $("#ID").val(ID)
+          $("#loading").html("")
+        $("#settingsForm").css("display","block")
+    };
+    init();
+  </script>
+</html>

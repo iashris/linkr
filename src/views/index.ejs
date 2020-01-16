@@ -16,6 +16,7 @@
   />
   <link href="/main.css" rel="stylesheet" type="text/css" />
   <style></style>
+
   <body>
     <%- include partials/navbar.ejs %>
 
@@ -26,16 +27,18 @@
           <p class="tagline">
             Use Makersgully platform to monetize any URL and track your sales.
           </p>
-          <input
+          <div id="ifLoggedIn">
+            <!-- <input
             type="url"
             id="link"
             name="link"
             aria-describedby="linkHelp"
             placeholder="URL you want to monetize"
-          />
-          <button id="monetize" data-toggle="modal" data-target="#configure">
+          /> -->
+            <!-- <button class="classico" data-toggle="modal" data-target="#configure">
             Set up
-          </button>
+          </button> -->
+          </div>
           <div
             class="modal fade"
             id="configure"
@@ -59,7 +62,7 @@
                 </div>
                 <div class="modal-body">
                   <div class="form-group">
-                    <label for="link">Link Title</label>
+                    <label for="link">Title</label>
                     <input
                       type="text"
                       class="form-control"
@@ -67,7 +70,7 @@
                       name="title"
                       value=""
                       aria-describedby="titleHelp"
-                      placeholder="My Amazing Short Story"
+                      placeholder=""
                     />
                     <!-- <small id="titleHelp" class="form-text text-muted"
                       >Please ensure your link works.</small
@@ -78,47 +81,25 @@
                     <textarea
                       class="form-control"
                       id="description"
-                      rows="6"
+                      rows="4"
                     ></textarea>
                   </div>
-                  <div class="form-row form-group">
-                    <div class="col">
-                      <label for="price">Unlock Price</label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text" id="basic-addon3"
-                            >₹</span
-                          >
-                        </div>
-
-                        <input
-                          type="number"
-                          class="form-control"
-                          name="price"
-                          id="price"
-                          placeholder="Price"
-                        />
-                      </div>
-                    </div>
-                    <div class="col">
-                      <label for="paytm">UPI/PayTM</label>
-                      <div class="input-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="paytm"
-                          name="paytm"
-                          placeholder="PayTM / UPI"
-                        />
-                      </div>
-                    </div>
-                  </div>
                   <div class="form-group">
-                    <label for="email">Email</label>
-                    <input
-                      class="form-control"
-                      id="email"
-                    ></input>
+                    <label for="price">Unlock Price</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3"
+                          >₹</span
+                        >
+                      </div>
+                      <input
+                        type="number"
+                        class="form-control"
+                        name="price"
+                        id="price"
+                        placeholder=""
+                      />
+                    </div>
                   </div>
                   <small id="titleHelp" class="form-text text-muted"
                     >We only service India right now.</small
@@ -132,7 +113,7 @@
                   >
                     Close
                   </button>
-                  <button type="button" class="btn btn-primary" id="submit">
+                  <button type="button" class="btn btn-primary" id="submit" disabled>
                     Generate Link
                   </button>
                 </div>
@@ -207,32 +188,27 @@
       </div>
     </div>
   </body>
-
-  <script
-    src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"
-  ></script>
-
-  <script type="text/javascript">
-    $("#submit").click(event => {
+  <%- include partials/auth.ejs %>
+  <script>
+    $("#submit").click(async event => {
       $("#submit").html(
         `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...`
       );
-      var data = {
+      const data = {
         link: document.getElementById("link").value,
         price: document.getElementById("price").value,
-        paytm: document.getElementById("paytm").value,
         title: document.getElementById("title").value,
-        email:document.getElementById("email").value,
         description: document.getElementById("description").value
       };
-      $.post("/", data, function(resp) {
+      console.log(data);
+      $.ajax({
+        type: "POST",
+        url: "/",
+        data: data,
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).done(function(resp) {
         $("#submit").html(`Generate Link`);
         $("#configure").modal("hide");
         $("#genlink").html(
@@ -241,5 +217,43 @@
         $("#genlinkmodal").modal("show");
       });
     });
+    (function() {
+      $("#link").keyup(function() {
+        const linkInput = $(this).val();
+        if (!validate(linkInput)) {
+          $("#setup").attr("disabled", "disabled"); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        } else {
+          $("#setup").removeAttr("disabled"); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        }
+      });
+    })();
+    (function() {
+      $("input.form-control").keyup(function() {
+        var empty = false;
+        $("input.form-control").each(function() {
+          if (!$(this).val()) {
+            empty = true;
+          }
+        });
+        if (empty) {
+          $("#submit").attr("disabled", "disabled"); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        } else {
+          $("#submit").removeAttr("disabled"); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+        }
+      });
+    })();
+
+    const validate = str => {
+      var pattern = new RegExp(
+        "^(https?:\\/\\/)?" + // protocol
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+          "(\\#[-a-z\\d_]*)?$",
+        "i"
+      ); // fragment locator
+      return !!pattern.test(str);
+    };
   </script>
 </html>

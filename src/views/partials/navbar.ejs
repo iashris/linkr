@@ -1,6 +1,62 @@
+<nav class="navbar navbar-expand navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="/">makersgully</a>
+    <!-- <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarText"
+      aria-controls="navbarText"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button> -->
+    <div class="navbar-collapse collapse" id="navbarText">
+      <ul class="navbar-nav ml-auto">
+        <!-- <li class="nav-item active">
+          <button class="btn btn-outline-primary" href="#">Login</button>
+        </li> -->
+        <li class="nav-item dropdown" id="loggedInDropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+          </a>
+          <div
+            class="dropdown-menu dropdown-menu-right"
+            aria-labelledby="navbarDropdown"
+          >
+            <a class="dropdown-item" onclick="toDashboard()">Dashboard</a>
+            <a class="dropdown-item" onclick="toTransactions()">Transactions</a>
+            <a class="dropdown-item" onclick="toSettings()">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" onclick="googleSignOut()">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-analytics.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+  crossorigin="anonymous"
+></script>
 <script>
   // Your web app's Firebase configuration
   var firebaseConfig = {
@@ -16,68 +72,30 @@
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
-</script>
-<script>
-var provider = new firebase.auth.GoogleAuthProvider();
-provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    console.log('User exists')
-    // User is signed in.
-    var displayName = user.displayName;
-    var email = user.email;
-    var emailVerified = user.emailVerified;
-    var photoURL = user.photoURL;
-    var isAnonymous = user.isAnonymous;
-    var uid = user.uid;
-    var providerData = user.providerData;
-    // ...
-  } else {
-    console.log('User does not exist')
-    // User is signed out.
-    // ...
+
+  let token;
+  firebase.auth().onAuthStateChanged(async user => {
+    if (user) {
+      token = await user.getIdToken();
+      if (token) {
+        $.ajaxSetup({
+          headers: {
+            "authorization": `Bearer ${token}`,
+          }
+        });
+      }
+    } else {
+      token = null;
+    }
+  });
+
+  function toDashboard(){
+    window.location.href = "/dashboard";
   }
-});
-function googleSignIn(){
-  firebase.auth().signInWithPopup(provider).then(function(result) {
-  // This gives you a Google Access Token. You can use it to access the Google API.
-  var token = result.credential.accessToken;
-  // The signed-in user info.
-  var user = result.user;
-  console.log(token,user)
-}).catch(function(error) {
-  // Handle Errors here.
-  var errorCode = error.code;
-  var errorMessage = error.message;
-  // The email of the user's account used.
-  var email = error.email;
-  // The firebase.auth.AuthCredential type that was used.
-  var credential = error.credential;
-  console.log(errorCode,errorMessage)
-  // ...
-});
-}
+  function toSettings(){
+    window.location.href = "/settings";
+  }
+  function toTransactions(){
+    window.location.href = "/transactions";
+  }
 </script>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container">
-    <a class="navbar-brand" href="/">makersgully</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarText"
-      aria-controls="navbarText"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav ml-auto">
-        <!-- <li class="nav-item active">
-          <button class="btn btn-outline-primary" href="#">Login</button>
-        </li> -->
-      </ul>
-    </div>
-  </div>
-</nav>
