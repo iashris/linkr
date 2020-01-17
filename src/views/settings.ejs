@@ -15,13 +15,13 @@
   <body>
     <%- include partials/navbar.ejs %>
     <div class="container topoffset">
-        <div id="loading">
+      <div id="loading">
         <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
         </div>
-    </div>
+      </div>
       <form id="settingsForm" style="display: none;">
         <div class="form-row">
           <div class="form-group col-md-6">
@@ -51,6 +51,24 @@
 
         <button type="submit" class="btn btn-primary">Save</button>
       </form>
+      <h5 class="topoffset">Payout History</h5>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Amount</th>
+            <th scope="col">Date</th>
+            <th scope="col">Method</th>
+          </tr>
+        </thead>
+        <tbody id="linksTable"></tbody>
+      </table>
+      <div id="warn">
+        <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+      </div>
     </div>
   </body>
   <%- include partials/auth.ejs %>
@@ -62,13 +80,13 @@
       $.ajax({
         type: "POST",
         url: "/updateSettings",
-        data: {method, ID},
+        data: { method, ID },
         headers: {
           authorization: `Bearer ${token}`
         }
       }).done(function(resp) {
-        if(resp==="OK"){
-            alert("All done.")
+        if (resp === "OK") {
+          alert("All done.");
         }
       });
     });
@@ -79,13 +97,36 @@
       const user = JSON.parse(localStorage.getItem("mkid"));
       $("#email").val(user.email);
       $("#Name").val(user.displayName);
-      const foo = await firebase.firestore().collection('users').doc(user.uid).get();
+      const foo = await firebase
+        .firestore()
+        .collection("users")
+        .doc(user.uid)
+        .get();
 
-          const {method="default", ID=""} = foo.data();
-          $("#method").val(method)
-          $("#ID").val(ID)
-          $("#loading").html("")
-        $("#settingsForm").css("display","block")
+      const { method = "default", ID = "" } = foo.data();
+      $("#method").val(method);
+      $("#ID").val(ID);
+      $("#loading").html("");
+      $("#settingsForm").css("display", "block");
+
+      $.ajax({
+        type: "POST",
+        url: "/getPayouts",
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).done(function(resp) {
+       const {payouts} = JSON.parse(resp);
+       if(Object.values(payouts).length===0){
+           $("#warn").html("No transactions found");
+       }
+       const totalPayouts = Object.values(payouts).reduce(
+          (a, b) => a + Number(b.value),
+          0
+        );
+        $("#totalPayouts").html("₹ " + totalPayouts);
+
+      });
     };
     init();
   </script>

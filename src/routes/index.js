@@ -154,6 +154,21 @@ router.post("/deleteLink", checkIfAuthenticated, async (req, res) => {
   }
 });
 
+router.post("/getPayouts", checkIfAuthenticated, async (req, res) => {
+  const {name,email,uid} = req.user;
+  const ref = admin.firestore()
+    .collection("payouts")
+    .doc(uid);
+  const requestedDoc = await ref.get();
+  if(!requestedDoc.exists){
+    res.send(JSON.stringify({payouts:[]}));
+    return;
+  }
+  const payoutHistory = requestedDoc.data();
+  console.log('now we have',payoutHistory)
+  res.send(JSON.stringify(payoutHistory));
+});
+
 
 router.get("/activate", async (req, res) => {
   res.end("Alright!");

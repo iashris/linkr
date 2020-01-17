@@ -49,7 +49,7 @@
         window.location.href = "/";
       }
       const user = JSON.parse(localStorage.getItem("mkid"));
-      foo = await firebase
+      const foo = await firebase
         .firestore()
         .collection("transactions")
         .where("uid", "==", user.uid)
@@ -58,7 +58,6 @@
       if (foo.empty) {
         $("#warn").html("No transactions found.");
       } else {
-        $("#warn").html("");
         foo.forEach(doc => {
           const { buyer, buyerName, price, time } = doc.data();
           myLinks[doc.id] = doc.data();
@@ -76,59 +75,10 @@
           0
         );
         $("#totalEarnings").html("₹ " + totalEarnings);
+        $("#warn").html("");
       }
     };
     init();
 
-    function openEdit(id) {
-      const { title, price, link, description } = myLinks[id];
-      $("#title").val(title);
-      $("#secret").val(link);
-      $("#price").val(price);
-      $("#editDocID").val(id);
-      $("#description").val(description);
-      $("#editModal").modal("show");
-    }
-    function openDelete(id) {
-      $("#deleteDocID").val(id);
-      $("#deleteModal").modal("show");
-    }
-    function saveEdit() {
-      const title = $("#title").val();
-      const secret = $("#secret").val();
-      const price = $("#price").val();
-      const editDocID = $("#editDocID").val();
-      const description = $("#description").val();
-
-      const data = { title, secret, price, editDocID, description };
-
-      $.ajax({
-        type: "POST",
-        url: "/updateLink",
-        data,
-        headers: {
-          authorization: `Bearer ${token}`
-        }
-      }).done(function(resp) {
-        if (resp === "OK") {
-          window.location.reload();
-        }
-      });
-    }
-    function confirmDelete() {
-      const deleteDocID = $("#deleteDocID").val();
-      $.ajax({
-        type: "POST",
-        url: "/deleteLink",
-        data: { id: deleteDocID },
-        headers: {
-          authorization: `Bearer ${token}`
-        }
-      }).done(function(resp) {
-        if (resp === "OK") {
-          window.location.reload();
-        }
-      });
-    }
   </script>
 </html>
