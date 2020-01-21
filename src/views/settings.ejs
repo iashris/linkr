@@ -106,7 +106,7 @@
         .get();
       let method = "default"; 
       let ID = "";
-      if(!foo.empty){
+      if(foo.data()){
         method = foo.data().method;
         ID = foo.data().ID;
       }
