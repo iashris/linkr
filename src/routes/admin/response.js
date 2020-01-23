@@ -11,11 +11,18 @@ router.post("/", async (req, res) => {
   console.log("in response post");
   var paramlist = req.body;
   const order_id = paramlist.ORDERID;
-  const doc_id = order_id.split("-IIP-")[0]; 
-  const transactionRef = admin.firestore().collection('transactions').doc(order_id);
+  const doc_id = order_id.split("-IIP-")[0];
+  const transactionRef = admin
+    .firestore()
+    .collection("transactions")
+    .doc(order_id);
   const transactionDetails = await transactionRef.get();
-  await transactionRef.set({status: paramlist.STATUS, reason:paramlist.RESPMSG},{merge:true})
-  const document = await admin.firestore()
+  await transactionRef.set(
+    { status: paramlist.STATUS, reason: paramlist.RESPMSG },
+    { merge: true }
+  );
+  const document = await admin
+    .firestore()
     .collection("links")
     .doc(doc_id)
     .get();
@@ -36,12 +43,19 @@ router.post("/", async (req, res) => {
         reason: "Reason: " + paramlist.RESPMSG
       });
     } else {
-      const buyer = transactionDetails.data().buyer;
-      if(buyer){
-        await shootEmail(buyer,link);
+      const { buyer, price, uid } = transactionDetails.data();
+      if (buyer) {
+        await shootEmail(buyer, link);
+        const sellerRef = admin
+          .firestore()
+          .collection("users")
+          .doc(uid);
+
+        await sellerRef.set({
+          earning: admin.firestore.FieldValue.increment(parseInt(price))
+        },{merge:true});
       }
       res.render("complete-success.ejs", { title, link });
-
     }
     //res.render("response.ejs", { restdata: "true", paramlist: paramlist });
   } else {

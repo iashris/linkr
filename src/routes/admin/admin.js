@@ -3,8 +3,7 @@ import { checkIfAuthenticated } from "../../middlewares/auth";
 const router = express.Router();
 
 router.get("/", function(req, res) {
-    console.log(req.session);
-    res.render("admin.ejs");
+    res.render("admin.ejs",{user:req.user});
   
 });
 

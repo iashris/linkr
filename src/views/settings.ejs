@@ -51,6 +51,21 @@
 
         <button type="submit" class="btn btn-primary">Save</button>
       </form>
+      <div class="row" style="margin-top: 40px;">
+        <div class="col-md-4">
+          <h4>Total Earnings</h4>
+          <h2 id="totalEarnings"></h2>
+        </div>
+        <div class="col-md-4">
+          <h4>Total Payouts</h4>
+          <h2 id="totalPayouts"></h2>
+        </div>
+        <div class="col-md-4">
+          <h4>Balance</h4>
+          <h2 id="balance"></h2>
+        </div>
+      </div>
+    
       <h5 class="topoffset">Payout History</h5>
       <p>You can request a payout when your earnings exceed ₹500</p>
       <table class="table table-bordered">
@@ -106,12 +121,15 @@
         .get();
       let method = "default"; 
       let ID = "";
+      let earnings = 0;
       if(foo.data()){
         method = foo.data().method;
         ID = foo.data().ID;
+        earnings = foo.data().earning || 0;
       }
       $("#method").val(method);
       $("#ID").val(ID);
+      $("#totalEarnings").html("₹ " + earnings);
       $("#loading").html("");
       $("#settingsForm").css("display", "block");
 
@@ -125,13 +143,17 @@
        const {payouts} = JSON.parse(resp);
        if(Object.values(payouts).length===0){
            $("#warn").html("No transactions found");
+           $("#totalPayouts").html("₹ 0");
+          $("#balance").html("₹ " + earnings);
        }
+       else{
        const totalPayouts = Object.values(payouts).reduce(
           (a, b) => a + Number(b.value),
           0
         );
         $("#totalPayouts").html("₹ " + totalPayouts);
-
+        $("#balance").html("₹ " + earnings - totalPayouts);
+       }
       });
     };
     init();
