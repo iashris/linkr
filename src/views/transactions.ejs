@@ -61,9 +61,10 @@
         foo.forEach(doc => {
           const { buyer, buyerName, price, time } = doc.data();
           myLinks[doc.id] = doc.data();
+          const url = doc.id.split('-IIP-')[0]
           $("#linksTable:last-child").append(`
                 <tr>
-                    <td><a href="https://makersgully.com/r/${doc.id}">${doc.id}</a></td>
+                    <td><a href="https://makersgully.com/r/${url}">${url}</a></td>
                     <td>${buyerName}</td>
                     <td>${buyer}</td>
                     <td>${price}</td>
