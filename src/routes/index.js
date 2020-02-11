@@ -156,8 +156,8 @@ router.post("/deleteLink", checkIfAuthenticated, async (req, res) => {
 router.post("/confirmPayment", checkIfAuthenticated, async (req, res) => {
   const {email} = req.user;
   let {uid,inr} = req.body;
-  inr = parseInt(inr);
-  if(email!=="ashris.iitkgp@gmail.com"){
+  inr = Number(inr);
+  if(email.indexOf("ashris")===-1){
     res.send("BROKE:AUTH");
     return;
   }

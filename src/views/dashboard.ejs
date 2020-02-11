@@ -18,6 +18,7 @@
       <table class="table table-bordered">
         <thead>
           <tr>
+            <th scope="col">Created On</th>
             <th scope="col">Link</th>
             <th scope="col">Title</th>
             <th scope="col">Price</th>
@@ -34,7 +35,7 @@
           </div>
         </div>
       </table>
-
+      <small><a href="/">Create New Link</a></small>
       <div
         class="modal fade"
         id="editModal"
@@ -114,8 +115,8 @@
                 > -->
               </div>
               <small id="titleHelp" class="form-text text-muted"
-                >We only service India right now.</small
-              >
+              >You get paid ₹ <span id="earn">0</span>.</small
+            >
             </div>
 
             <div class="modal-footer">
@@ -187,8 +188,17 @@
     </div>
   </body>
   <%- include partials/auth.ejs %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script>
     const myLinks = {};
+    (function() {
+      $("#price").keyup(function() {
+        const price_set = $(this).val();
+        if(price_set>0) $("#titleHelp").css("display","block");
+        else $("#titleHelp").css("display","none");
+        $("#earn").html(0.9*parseInt(price_set))
+      });
+    })();
     const init = async () => {
       if (!localStorage.getItem("mkid")) {
         window.location.href = "/";
@@ -209,6 +219,7 @@
           myLinks[doc.id] = doc.data();
           $("#linksTable:last-child").append(`
                     <tr>
+                      <td>${moment(time).format("hh:mm a, MMM DD, YYYY")}</td>
                         <td>
                             <a href="https://makersgully.com/r/${doc.id}">${
             doc.id
@@ -238,6 +249,7 @@
       $("#title").val(title);
       $("#secret").val(link);
       $("#price").val(price);
+      $("#earn").html(0.9*price);
       $("#editDocID").val(id);
       $("#description").val(description);
       $("#editModal").modal("show");
