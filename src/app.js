@@ -34,7 +34,7 @@ app.use("/testtxn", testRoute);
 app.use("/pgredirect", pageRedirectRoute);
 app.use("/complete", responseRoute);
 app.use("/test",testsRoute);
-app.use("/admin",adminRoute);
+app.use("/veritasium",adminRoute);
 
 app.use(express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views");

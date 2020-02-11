@@ -15,15 +15,17 @@
   <body>
     <%- include partials/navbar.ejs %>
     <div class="container topoffset">
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-md-4">
           <h4>Total Earnings</h4>
           <h2 id="totalEarnings"></h2>
         </div>
-      </div>
+      </div> -->
+      <h4>Last 20 Transactions</h4>
       <table class="table table-bordered topoffset">
         <thead>
           <tr>
+            <th scope="col">Date</th>
             <th scope="col">Link</th>
             <th scope="col">Customer</th>
             <th scope="col">Email</th>
@@ -41,6 +43,7 @@
       </table>
     </div>
   </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <%- include partials/auth.ejs %>
   <script>
     const myLinks = {};
@@ -52,8 +55,10 @@
       const foo = await firebase
         .firestore()
         .collection("transactions")
+        .orderBy('time', 'desc')
         .where("uid", "==", user.uid)
         .where("status", "==", "TXN_SUCCESS")
+        .limit(20)
         .get();
       if (foo.empty) {
         $("#warn").html("No transactions found.");
@@ -64,6 +69,7 @@
           const url = doc.id.split('-IIP-')[0]
           $("#linksTable:last-child").append(`
                 <tr>
+                  <td>${moment(time).format("hh:mm a, MMM DD, YYYY")}</td>
                     <td><a href="https://makersgully.com/r/${url}">${url}</a></td>
                     <td>${buyerName}</td>
                     <td>${buyer}</td>
@@ -71,11 +77,11 @@
                 </tr>
             `);
         });
-        const totalEarnings = Object.values(myLinks).reduce(
-          (a, b) => a + Number(b.price),
-          0
-        );
-        $("#totalEarnings").html("₹ " + totalEarnings);
+        // const totalEarnings = Object.values(myLinks).reduce(
+        //   (a, b) => a + Number(b.price),
+        //   0
+        // );
+        // $("#totalEarnings").html("₹ " + totalEarnings);
         $("#warn").html("");
       }
     };

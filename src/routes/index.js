@@ -35,10 +35,9 @@ router.get("/r/:id", async (req, res) => {
   if (!document.exists) {
     return res.end("Invalid Link");
   }
-  const { price, title, description } = document.data();
-  res.render("redeem.ejs", { price, title, id, description });
+  const { price, title, description, name } = document.data();
+  res.render("redeem.ejs", { price, title, id, description, name });
 
-  //res.render("redeem.ejs", { price: 600, title: "Hello Ramanto Magazine", id: "bollywood" });
 });
 
 router.post("/r", async (req, res) => {
@@ -117,7 +116,7 @@ router.post("/updateSettings", checkIfAuthenticated, async (req, res) => {
   const ref = await admin.firestore()
     .collection("users")
     .doc(uid);
-  const toSend = { method, ID };
+  const toSend = { method, ID, name, email, uid };
   console.log('Sending ',toSend)
   ref.set(toSend,{merge:true});
   res.send("OK");
@@ -154,13 +153,52 @@ router.post("/deleteLink", checkIfAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/getPayouts", checkIfAuthenticated, async (req, res) => {
+router.post("/confirmPayment", checkIfAuthenticated, async (req, res) => {
+  const {email} = req.user;
+  let {uid,inr} = req.body;
+  inr = parseInt(inr);
+  if(email!=="ashris.iitkgp@gmail.com"){
+    res.send("BROKE:AUTH");
+    return;
+  }
+  if(!uid || !inr){
+    res.send("BROKE:DATA");
+    return;
+  }
+  console.log(uid,inr,'to be')
+  const ref = admin.firestore()
+    .collection("users")
+    .doc(uid);
+  await ref.set({
+    payout: admin.firestore.FieldValue.increment(inr),
+    balance: admin.firestore.FieldValue.increment(-1*inr)
+  },{merge:true});
+  res.send("OK")
+});
+
+// router.post("/getPayouts", checkIfAuthenticated, async (req, res) => {
+//   const {name,email,uid} = req.user;
+//   const ref = admin.firestore()
+//     .collection("payouts")
+//     .doc(uid);
+//   const requestedDoc = await ref.get();
+//   if(!requestedDoc.exists){
+//     res.send(JSON.stringify({payouts:[]}));
+//     return;
+//   }
+//   const payoutHistory = requestedDoc.data();
+//   console.log('now we have',payoutHistory)
+//   res.send(JSON.stringify(payoutHistory));
+// });
+
+router.post("/registerUser", checkIfAuthenticated, async (req, res) => {
   const {name,email,uid} = req.user;
   const ref = admin.firestore()
-    .collection("payouts")
+    .collection("users")
     .doc(uid);
   const requestedDoc = await ref.get();
   if(!requestedDoc.exists){
+    //First time user
     res.send(JSON.stringify({payouts:[]}));
     return;
   }

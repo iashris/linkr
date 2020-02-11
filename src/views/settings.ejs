@@ -66,7 +66,7 @@
         </div>
       </div>
     
-      <h5 class="topoffset">Payout History</h5>
+      <!-- <h5 class="topoffset">Payout History</h5>
       <p>You can request a payout when your earnings exceed ₹500</p>
       <table class="table table-bordered">
         <thead>
@@ -84,7 +84,7 @@
           <div class="bounce2"></div>
           <div class="bounce3"></div>
         </div>
-      </div>
+      </div> -->
     </div>
   </body>
   <%- include partials/auth.ejs %>
@@ -122,39 +122,46 @@
       let method = "default"; 
       let ID = "";
       let earnings = 0;
-      if(foo.data()){
-        method = foo.data().method;
-        ID = foo.data().ID;
-        earnings = foo.data().earning || 0;
+      let payout = 0;
+      let balance = 0;
+      const myData = foo.data();
+      if(myData){
+        method = myData.method;
+        ID = myData.ID;
+        earnings = myData.earning || 0;
+        payouts = myData.payout || 0;
+        balance = myData.balance || 0;
       }
       $("#method").val(method);
       $("#ID").val(ID);
       $("#totalEarnings").html("₹ " + earnings);
+      $("#totalPayouts").html("₹ " + payouts);
+      $("#balance").html("₹ " + balance);
       $("#loading").html("");
       $("#settingsForm").css("display", "block");
 
-      $.ajax({
-        type: "POST",
-        url: "/getPayouts",
-        headers: {
-          authorization: `Bearer ${token}`
-        }
-      }).done(function(resp) {
-       const {payouts} = JSON.parse(resp);
-       if(Object.values(payouts).length===0){
-           $("#warn").html("No transactions found");
-           $("#totalPayouts").html("₹ 0");
-          $("#balance").html("₹ " + earnings);
-       }
-       else{
-       const totalPayouts = Object.values(payouts).reduce(
-          (a, b) => a + Number(b.value),
-          0
-        );
-        $("#totalPayouts").html("₹ " + totalPayouts);
-        $("#balance").html("₹ " + earnings - totalPayouts);
-       }
-      });
+      // $.ajax({
+      //   type: "POST",
+      //   url: "/getPayouts",
+      //   headers: {
+      //     authorization: `Bearer ${token}`
+      //   }
+      // }).done(function(resp) {
+      //  const {payouts} = JSON.parse(resp);
+      //  if(Object.values(payouts).length===0){
+      //      $("#warn").html("No transactions found");
+      //      $("#totalPayouts").html("₹ 0");
+      //     $("#balance").html("₹ " + earnings);
+      //  }
+      //  else{
+      //  const totalPayouts = Object.values(payouts).reduce(
+      //     (a, b) => a + Number(b.value),
+      //     0
+      //   );
+      //   $("#totalPayouts").html("₹ " + totalPayouts);
+      //   $("#balance").html("₹ " + earnings - totalPayouts);
+      //  }
+      // });
     };
     init();
   </script>

@@ -42,6 +42,7 @@
         function() {
           localStorage.removeItem("mkid");
           updateValues();
+          window.location="/";
         },
         function(error) {
           console.log("Error happens in logout");
@@ -58,7 +59,10 @@
         const { accessToken, idToken } = result.credential;
         const user = result.user;
         localStorage.setItem("mkid", JSON.stringify(user));
+        // TODO: Tell server to create user if not exist
+        
         updateValues();
+        window.location="/settings";
       })
       .catch((error) => {
         const errorMessage = error.message;

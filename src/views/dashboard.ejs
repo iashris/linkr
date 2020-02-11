@@ -199,7 +199,6 @@
         .collection("links")
         .where("uid", "==", user.uid)
         .get();
-      console.log(foo);
       if (foo.empty) {
         console.log("emp");
         $("#warn").html("No projects found.");
@@ -211,14 +210,22 @@
           $("#linksTable:last-child").append(`
                     <tr>
                         <td>
-                            <a href="https://makersgully.com/r/${doc.id}">${doc.id}</a>
+                            <a href="https://makersgully.com/r/${doc.id}">${
+            doc.id
+          }</a>
                         </td>
                         <td>${title}</td>
                         <td>₹ ${price}</td>
-                        <td><a href="${link}">${$.trim(link).substring(0, 25).trim(this) + "..."}</a></td>
+                        <td><a href="${link}">${$.trim(link)
+            .substring(0, 25)
+            .trim(this) + "..."}</a></td>
                         <td style="display:none;">${description}</td>
-                        <td><button class="btn btn-primary" onclick="openEdit('${doc.id}')">Edit</button>
-                        <button class="btn btn-danger"  onclick="openDelete('${doc.id}')">Delete</button></td>
+                        <td><button class="btn btn-primary" onclick="openEdit('${
+                          doc.id
+                        }')">Edit</button>
+                        <button class="btn btn-danger"  onclick="openDelete('${
+                          doc.id
+                        }')">Delete</button></td>
                     </tr>
                 `);
         });
@@ -266,7 +273,7 @@
       $.ajax({
         type: "POST",
         url: "/deleteLink",
-        data: {id:deleteDocID},
+        data: { id: deleteDocID },
         headers: {
           authorization: `Bearer ${token}`
         }

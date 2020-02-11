@@ -37,6 +37,7 @@ router.post("/", async (req, res) => {
   console.log(paramlist);
   if (verifychecksum(paramlist, config.merchant_key)) {
     if (paramlist.STATUS != "TXN_SUCCESS") {
+      transactionRef.delete();
       // Should be != made == for dev
       res.render("complete-failure.ejs", {
         title,
@@ -50,9 +51,9 @@ router.post("/", async (req, res) => {
           .firestore()
           .collection("users")
           .doc(uid);
-
         await sellerRef.set({
-          earning: admin.firestore.FieldValue.increment(parseInt(price))
+          earning: admin.firestore.FieldValue.increment(0.9*parseInt(price)),
+          balance: admin.firestore.FieldValue.increment(0.9*parseInt(price)),
         },{merge:true});
       }
       res.render("complete-success.ejs", { title, link });

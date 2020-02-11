@@ -1,1 +1,139 @@
-Heyy Admin Portal <%= user.name %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Title XYZ</title>
+  </head>
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  />
+  <link href="/main.css" rel="stylesheet" type="text/css" />
+  <link
+    href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <body>
+    <%- include partials/navbar.ejs %>
+    <div class="container">
+      <table id="usTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Earning</th>
+            <th>Payout</th>
+            <th>Pending</th>
+            <th>Pay</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%for (var result of uzrs){%>
+          <tr>
+            <td><%=result.name%></td>
+            <td><%=result.email%></td>
+            <td><%=result.earning%></td>
+            <td><%=result.payout%></td>
+            <td><%=result.balance%></td>
+            <td>
+              <button
+                onclick='openPayment("<%=result.uid%>","<%=result.balance%>")'
+              >
+                Pay
+              </button>
+            </td>
+          </tr>
+          <%}%>
+        </tbody>
+      </table>
+      <div
+        class="modal fade"
+        id="paymentModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="confirmModal"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">
+                Confirm Payment
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div>
+                Are you sure you have paid <span id="toPayINR"></span> to
+                <span id="toPayUID"></span>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                onclick="confirmPayment()"
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <%- include partials/auth.ejs %>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script>
+    // $("#configure").modal("show");
+    $(document).ready(function() {
+      $("#usTable").DataTable();
+    });
+    function openPayment(uid, q) {
+      console.log(uid, q);
+      $("#toPayINR").html(q);
+      $("#toPayUID").html(uid);
+      $("#paymentModal").modal("show");
+    }
+    function confirmPayment() {
+      const inr = $("#toPayINR").text();
+      const uid = $("#toPayUID").text();
+      $.ajax({
+        type: "POST",
+        url: "/confirmPayment",
+        data: { uid, inr:parseInt(inr) },
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).done(function(resp) {
+        if (resp === "OK") {
+          window.location.reload();
+        }
+        else if(resp.indexOf("BROKE")!==-1){
+          alert(resp);
+        }
+      });
+    }
+  </script>
+</html>

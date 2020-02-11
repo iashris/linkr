@@ -101,8 +101,8 @@
                       />
                     </div>
                   </div>
-                  <small id="titleHelp" class="form-text text-muted"
-                    >We only service India right now.</small
+                  <small id="titleHelp" style="display:none" class="form-text text-muted"
+                    >You get paid ₹ <span id="earn">0</span>.</small
                   >
                 </div>
                 <div class="modal-footer">
@@ -225,6 +225,14 @@
         } else {
           $("#setup").removeAttr("disabled"); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
         }
+      });
+    })();
+    (function() {
+      $("#price").keyup(function() {
+        const price_set = $(this).val();
+        if(price_set>0) $("#titleHelp").css("display","block");
+        else $("#titleHelp").css("display","none");
+        $("#earn").html(0.9*parseInt(price_set))
       });
     })();
     (function() {
