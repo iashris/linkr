@@ -4,6 +4,7 @@ import admin from "../config/firebase";
 import config from "../config/config";
 import checksum from "../model/checksum";
 import {checkIfAuthenticated} from "../middlewares/auth";
+import {payoutMade} from "../config/emailer";
 
 const titleToId = title => {
   const id = title
@@ -154,10 +155,10 @@ router.post("/deleteLink", checkIfAuthenticated, async (req, res) => {
 });
 
 router.post("/confirmPayment", checkIfAuthenticated, async (req, res) => {
-  const {email} = req.user;
-  let {uid,inr} = req.body;
+  const {email:authE} = req.user;
+  let {uid,inr,email} = req.body;
   inr = Number(inr);
-  if(email.indexOf("ashris")===-1){
+  if(authE.indexOf("ashris")===-1){
     res.send("BROKE:AUTH");
     return;
   }
@@ -173,6 +174,7 @@ router.post("/confirmPayment", checkIfAuthenticated, async (req, res) => {
     payout: admin.firestore.FieldValue.increment(inr),
     balance: admin.firestore.FieldValue.increment(-1*inr)
   },{merge:true});
+  await payoutMade(email,inr);
   res.send("OK")
 });
 

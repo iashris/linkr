@@ -15,7 +15,8 @@
   <body>
     <%- include partials/navbar.ejs %>
     <div class="container topoffset">
-      <table class="table table-bordered">
+      <h4>Links</h4>
+      <table style="margin-top:40px" class="table table-bordered">
         <thead>
           <tr>
             <th scope="col">Created On</th>
@@ -35,6 +36,7 @@
           </div>
         </div>
       </table>
+      <button id="loadmo" style="display:none" onclick="loadmore();" class="btn btn-primary">Load More</button>
       <small><a href="/">Create New Link</a></small>
       <div
         class="modal fade"
@@ -190,6 +192,8 @@
   <%- include partials/auth.ejs %>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script>
+    let foo,user;
+    const lo=15;
     const myLinks = {};
     (function() {
       $("#price").keyup(function() {
@@ -199,22 +203,47 @@
         $("#earn").html(0.9*parseInt(price_set))
       });
     })();
+      const loadmore = async ()=>{
+      const last = foo.docs[foo.docs.length - 1]
+      foo = await firebase
+        .firestore()
+        .collection("links")
+        .orderBy('time', 'desc')
+        .where("uid", "==", user.uid)
+        .startAfter(last)
+        .limit(lo)
+        .get();
+      if(foo.docs.length<lo){
+        $("#loadmo").css("display","none")
+      }
+      populate(foo);
+    }
     const init = async () => {
       if (!localStorage.getItem("mkid")) {
         window.location.href = "/";
       }
-      const user = JSON.parse(localStorage.getItem("mkid"));
+      user = JSON.parse(localStorage.getItem("mkid"));
       foo = await firebase
         .firestore()
         .collection("links")
+        .orderBy('time', 'desc')
         .where("uid", "==", user.uid)
+        .limit(lo)
         .get();
       if (foo.empty) {
         console.log("emp");
         $("#warn").html("No projects found.");
       } else {
         $("#warn").html("");
-        foo.forEach(doc => {
+        populate(foo);
+        if(foo.docs.length===lo){
+          $("#loadmo").css("display","block")
+        }
+      }
+    };
+    init();
+    function populate(dna){
+          dna.forEach(doc => {
           const { description, title, price, link, time } = doc.data();
           myLinks[doc.id] = doc.data();
           $("#linksTable:last-child").append(`
@@ -240,10 +269,7 @@
                     </tr>
                 `);
         });
-      }
-    };
-    init();
-
+    }
     function openEdit(id) {
       const { title, price, link, description } = myLinks[id];
       $("#title").val(title);

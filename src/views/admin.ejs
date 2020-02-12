@@ -28,6 +28,8 @@
           <tr>
             <th>Name</th>
             <th>Email</th>
+            <th>Method</th>
+            <th>ID</th>
             <th>Earning</th>
             <th>Payout</th>
             <th>Pending</th>
@@ -39,12 +41,14 @@
           <tr>
             <td><%=result.name%></td>
             <td><%=result.email%></td>
+            <td><%=result.method%></td>
+            <td><%=result.ID%></td>
             <td><%=result.earning%></td>
             <td><%=result.payout%></td>
             <td><%=result.balance%></td>
             <td>
               <button
-                onclick='openPayment("<%=result.uid%>","<%=result.balance%>")'
+                onclick='openPayment("<%=result.uid%>","<%=result.balance%>","<%=result.email%>")'
               >
                 Pay
               </button>
@@ -79,7 +83,7 @@
             <div class="modal-body">
               <div>
                 Are you sure you have paid <span id="toPayINR"></span> to
-                <span id="toPayUID"></span>
+                <span id="toPayUID"></span> (<span id="toPayEmail"></span>)
               </div>
             </div>
             <div class="modal-footer">
@@ -110,19 +114,21 @@
     $(document).ready(function() {
       $("#usTable").DataTable();
     });
-    function openPayment(uid, q) {
+    function openPayment(uid, q,email) {
       console.log(uid, q);
       $("#toPayINR").html(q);
       $("#toPayUID").html(uid);
+      $("#toPayEmail").html(email);
       $("#paymentModal").modal("show");
     }
     function confirmPayment() {
       const inr = $("#toPayINR").text();
       const uid = $("#toPayUID").text();
+      const email = $("#toPayEmail").text();
       $.ajax({
         type: "POST",
         url: "/confirmPayment",
-        data: { uid, inr:parseInt(inr) },
+        data: { uid, inr:parseInt(inr), email },
         headers: {
           authorization: `Bearer ${token}`
         }

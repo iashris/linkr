@@ -3,7 +3,7 @@ const router = express.Router();
 import checksum from "../../model/checksum";
 import config from "../../config/config";
 import admin from "../../config/firebase";
-import shootEmail from "../../config/emailer";
+import {rewardLink} from "../../config/emailer";
 
 const { verifychecksum } = checksum;
 
@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
     } else {
       const { buyer, price, uid } = transactionDetails.data();
       if (buyer) {
-        await shootEmail(buyer, link);
+        await rewardLink(buyer, link);
         const sellerRef = admin
           .firestore()
           .collection("users")

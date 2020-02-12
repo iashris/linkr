@@ -21,7 +21,7 @@
           <h2 id="totalEarnings"></h2>
         </div>
       </div> -->
-      <h4>Last 20 Transactions</h4>
+      <h4>Transactions</h4>
       <table class="table table-bordered topoffset">
         <thead>
           <tr>
@@ -41,31 +41,57 @@
           </div>
         </div>
       </table>
+      <button id="loadmo" style="display:none" onclick="loadmore();" class="btn btn-primary">Load More</button>
     </div>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <%- include partials/auth.ejs %>
   <script>
-    const myLinks = {};
+    let foo, user;
+    const lo = 15;
     const init = async () => {
       if (!localStorage.getItem("mkid")) {
         window.location.href = "/";
       }
-      const user = JSON.parse(localStorage.getItem("mkid"));
-      const foo = await firebase
+      user = JSON.parse(localStorage.getItem("mkid"));
+      foo = await firebase
         .firestore()
         .collection("transactions")
         .orderBy('time', 'desc')
         .where("uid", "==", user.uid)
         .where("status", "==", "TXN_SUCCESS")
-        .limit(20)
+        .limit(lo)
         .get();
       if (foo.empty) {
         $("#warn").html("No transactions found.");
       } else {
-        foo.forEach(doc => {
+        populate(foo);
+        if(foo.docs.length===lo){
+          $("#loadmo").css("display","block")
+        }
+        $("#warn").html("");
+      }
+    };
+    init();
+    const loadmore = async ()=>{
+      const last = foo.docs[foo.docs.length - 1]
+      foo = await firebase
+        .firestore()
+        .collection("transactions")
+        .orderBy('time', 'desc')
+        .where("uid", "==", user.uid)
+        .where("status", "==", "TXN_SUCCESS")
+        .startAfter(last)
+        .limit(lo)
+        .get();
+      if(foo.docs.length<lo){
+        $("#loadmo").css("display","none")
+      }
+      populate(foo);
+    }
+    function populate(dna){
+          dna.forEach(doc => {
           const { buyer, buyerName, price, time } = doc.data();
-          myLinks[doc.id] = doc.data();
           const url = doc.id.split('-IIP-')[0]
           $("#linksTable:last-child").append(`
                 <tr>
@@ -77,16 +103,7 @@
                 </tr>
             `);
         });
-        // const totalEarnings = Object.values(myLinks).reduce(
-        //   (a, b) => a + Number(b.price),
-        //   0
-        // );
-        // $("#totalEarnings").html("₹ " + totalEarnings);
-        $("#warn").html("");
-      }
-    };
-    init();
-
+    }
   </script>
 </html>
 

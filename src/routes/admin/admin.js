@@ -6,6 +6,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     const allUsers = await admin.firestore()
     .collection('users')
+    .orderBy('balance','desc')
     .where("balance",">=",1)
     .get();
     // >=500 
