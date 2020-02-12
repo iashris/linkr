@@ -272,8 +272,16 @@
     (function() {
       $("#price").keyup(function() {
         const price_set = $(this).val();
-        if(price_set>0) $("#titleHelp").css("display","block");
-        else $("#titleHelp").css("display","none");
+        console.log(price_set)
+        
+        if(Number(price_set)>0) {
+          $("#titleHelp").css("display","block");
+          $("#setup").removeAttr("disabled"); 
+        }
+        else {
+          $("#titleHelp").css("display","none");
+          $("#setup").attr("disabled", "disabled");
+        }
         $("#earn").html(0.9*parseInt(price_set))
       });
     })();
