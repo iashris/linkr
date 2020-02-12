@@ -110,13 +110,13 @@ router.post("/", checkIfAuthenticated, async (req, res) => {
   res.send(final_id);
 });
 
-router.post("/updateSettings", checkIfAuthenticated, async (req, res) => {
+router.post("/updateProfile", checkIfAuthenticated, async (req, res) => {
   const {name,email,uid} = req.user;
-  const { method, ID } = req.body;
+  const { method, ID, phone } = req.body;
   const ref = await admin.firestore()
     .collection("users")
     .doc(uid);
-  const toSend = { method, ID, name, email, uid };
+  const toSend = { method, ID, name, email, uid, phone };
   console.log('Sending ',toSend)
   ref.set(toSend,{merge:true});
   res.send("OK");
@@ -220,12 +220,12 @@ router.get("/terms", function(req, res) {
   res.render("tos.ejs");
 });
 
-router.get("/dashboard", async (req, res) => {
-res.render('dashboard.ejs')
+router.get("/links", async (req, res) => {
+res.render('links.ejs')
 });
 
-router.get("/settings", function(req, res) {
-  res.render("settings.ejs");
+router.get("/dashboard", function(req, res) {
+  res.render("dashboard.ejs");
 });
 
 router.get("/transactions", function(req, res) {

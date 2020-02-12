@@ -11,13 +11,17 @@
       $("#ifLoggedIn").html(`<input
           type="url"
           id="link"
+          autofocus
           name="link"
           aria-describedby="linkHelp"
           placeholder="URL you want to monetize"
         />
         <button class="classico" data-toggle="modal" data-target="#configure" id="setup" disabled>
           Set up
-        </button>`);
+        </button>
+        <div><small id="linkwarn"></small></div>
+        `
+        );
     } else {
       $("#loggedInDropdown").css("display","none");
       $("#ifLoggedIn").html(`
@@ -62,7 +66,7 @@
         // TODO: Tell server to create user if not exist
         
         updateValues();
-        window.location="/settings";
+        window.location="/dashboard";
       })
       .catch((error) => {
         const errorMessage = error.message;

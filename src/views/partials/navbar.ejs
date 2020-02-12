@@ -32,9 +32,9 @@
             class="dropdown-menu dropdown-menu-right"
             aria-labelledby="navbarDropdown"
           >
-            <a class="dropdown-item" onclick="toDashboard()">Links</a>
+            <a class="dropdown-item" onclick="toLinks()">Links</a>
             <a class="dropdown-item" onclick="toTransactions()">Transactions</a>
-            <a class="dropdown-item" onclick="toSettings()">Dashboard</a>
+            <a class="dropdown-item" onclick="toDashboard()">Dashboard</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" onclick="googleSignOut()">Logout</a>
           </div>
@@ -93,8 +93,8 @@
   function toDashboard(){
     window.location.href = "/dashboard";
   }
-  function toSettings(){
-    window.location.href = "/settings";
+  function toLinks(){
+    window.location.href = "/links";
   }
   function toTransactions(){
     window.location.href = "/transactions";

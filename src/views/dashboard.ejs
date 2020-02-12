@@ -15,285 +15,187 @@
   <body>
     <%- include partials/navbar.ejs %>
     <div class="container topoffset">
+      <div id="loading">
+        <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+      </div>
+      <div id="warning" style="display:none" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Profile Incomplete!</strong> In order to receive your payments, please ensure all the details below are filled.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="row" style="margin-top: 40px;">
+        <div class="col-md-4">
+          <div class="card bg-light mb-3 center">
+            <div class="card-header">Total Earnings</div>
+            <div class="card-body">
+              <h2 id="totalEarnings" class="card-title"></h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card bg-light mb-3 center">
+            <div class="card-header">Total Payouts</div>
+            <div class="card-body">
+              <h2 id="totalPayouts" class="card-title"></h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card bg-light mb-3 center">
+            <div class="card-header">Balance</div>
+            <div class="card-body">
+              <h2 id="balance" class="card-title"></h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4 style="margin-top: 40px;">Profile</h4>
+      <form id="profileForm" style="display: none; margin-top:20px">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="Name">Name</label>
+            <input type="text" class="form-control" id="Name" readonly />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="email">Email</label>
+            <input type="email" readonly class="form-control" id="email" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="phone">Phone Number</label>
+            <input type="text" class="form-control" id="phone" />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="method">Method</label>
+            <select id="method" class="form-control">
+              <option selected value="default">Choose...</option>
+              <option value="paytm">PayTM Number</option>
+              <option value="tez">GoogleTez Number</option>
+              <option value="upi">UPI</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="ID">ID/Number</label>
+            <input type="text" class="form-control" id="ID" />
+          </div>
+        </div>
+
+        <button id="profileFormSubmit" style="display: none;" type="submit" class="btn btn-primary">Save</button>
+      </form>
+    
+      <!-- <h5 class="topoffset">Payout History</h5>
+      <p>You can request a payout when your earnings exceed ₹500</p>
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th scope="col">Created On</th>
-            <th scope="col">Link</th>
-            <th scope="col">Title</th>
-            <th scope="col">Price</th>
-            <th scope="col">Secret</th>
-            <th scope="col">Action</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Date</th>
+            <th scope="col">Method</th>
           </tr>
         </thead>
         <tbody id="linksTable"></tbody>
-        <div id="warn">
-          <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-          </div>
-        </div>
       </table>
-      <small><a href="/">Create New Link</a></small>
-      <div
-        class="modal fade"
-        id="editModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="editModal"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
-                Edit Link
-              </h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="form-group">
-                <label for="link">Title</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="title"
-                  name="title"
-                  value=""
-                  aria-describedby="titleHelp"
-                  placeholder=""
-                />
-                <!-- <small id="titleHelp" class="form-text text-muted"
-                >Please ensure your link works.</small
-              > -->
-              </div>
-              <div class="form-group">
-                <label for="description">Description</label>
-                <textarea
-                  class="form-control"
-                  id="description"
-                  rows="4"
-                ></textarea>
-              </div>
-              <div class="form-group">
-                <label for="price">Unlock Price</label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon3">₹</span>
-                  </div>
-                  <input
-                    type="number"
-                    class="form-control"
-                    name="price"
-                    id="price"
-                    placeholder=""
-                  />
-                </div>
-              </div>
-              <div style="display:none" id="editDocID"></div>
-              <div class="form-group">
-                <label for="secret">Secret</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="secret"
-                  name="title"
-                  value=""
-                  aria-describedby="titleHelp"
-                  placeholder=""
-                />
-                <!-- <small id="titleHelp" class="form-text text-muted"
-                  >Please ensure your link works.</small
-                > -->
-              </div>
-              <small id="titleHelp" class="form-text text-muted"
-              >You get paid ₹ <span id="earn">0</span>.</small
-            >
-            </div>
-
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-primary"
-                onclick="saveEdit()"
-              >
-                Save
-              </button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+      <div id="warn">
+        <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
         </div>
-      </div>
-
-      <div
-        class="modal fade"
-        id="deleteModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="deleteModal"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">
-                Delete Link
-              </h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div style="display:none" id="deleteDocID"></div>
-            <div class="modal-body">
-              <div>Are you sure you want to delete this link?</div>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-danger"
-                onclick="confirmDelete()"
-              >
-                Delete
-              </button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      </div> -->
     </div>
   </body>
   <%- include partials/auth.ejs %>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script>
-    const myLinks = {};
-    (function() {
-      $("#price").keyup(function() {
-        const price_set = $(this).val();
-        if(price_set>0) $("#titleHelp").css("display","block");
-        else $("#titleHelp").css("display","none");
-        $("#earn").html(0.9*parseInt(price_set))
+    $("#profileForm").submit(function(e) {
+      e.preventDefault();
+      const method = $("#method").val();
+      const ID = $("#ID").val() || "";
+      const phone = $("#phone").val() || "";
+      $.ajax({
+        type: "POST",
+        url: "/updateProfile",
+        data: { method, ID, phone },
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).done(function(resp) {
+        if (resp === "OK") {
+          window.location.reload();
+        }
       });
-    })();
+    });
+    $("input, select").change(function(){
+      $("#profileFormSubmit").css("display","block")
+    });
     const init = async () => {
       if (!localStorage.getItem("mkid")) {
         window.location.href = "/";
       }
       const user = JSON.parse(localStorage.getItem("mkid"));
-      foo = await firebase
+      $("#email").val(user.email);
+      $("#Name").val(user.displayName);
+
+      const foo = await firebase
         .firestore()
-        .collection("links")
-        .where("uid", "==", user.uid)
+        .collection("users")
+        .doc(user.uid)
         .get();
-      if (foo.empty) {
-        console.log("emp");
-        $("#warn").html("No projects found.");
-      } else {
-        $("#warn").html("");
-        foo.forEach(doc => {
-          const { description, title, price, link, time } = doc.data();
-          myLinks[doc.id] = doc.data();
-          $("#linksTable:last-child").append(`
-                    <tr>
-                      <td>${moment(time).format("hh:mm a, MMM DD, YYYY")}</td>
-                        <td>
-                            <a href="https://makersgully.com/r/${doc.id}">${
-            doc.id
-          }</a>
-                        </td>
-                        <td>${title}</td>
-                        <td>₹ ${price}</td>
-                        <td><a href="${link}">${$.trim(link)
-            .substring(0, 25)
-            .trim(this) + "..."}</a></td>
-                        <td style="display:none;">${description}</td>
-                        <td><button class="btn btn-primary" onclick="openEdit('${
-                          doc.id
-                        }')">Edit</button>
-                        <button class="btn btn-danger"  onclick="openDelete('${
-                          doc.id
-                        }')">Delete</button></td>
-                    </tr>
-                `);
-        });
+      let method = "default"; 
+      let ID = "";
+      let phone = "";
+      let earnings = 0;
+      let payout = 0;
+      let balance = 0;
+      const myData = foo.data();
+      if(myData){
+        method = myData.method;
+        ID = myData.ID;
+        phone = myData.phone;
+        earnings = myData.earning || 0;
+        payouts = myData.payout || 0;
+        balance = myData.balance || 0;
       }
+      $("#method").val(method);
+      $("#phone").val(phone);
+      $("#ID").val(ID);
+      if(!method || !phone || !ID){
+        $("#warning").css("display","block")
+      }
+      $("#totalEarnings").html("₹ " + earnings);
+      $("#totalPayouts").html("₹ " + payouts);
+      $("#balance").html("₹ " + balance);
+      $("#loading").html("");
+      $("#profileForm").css("display", "block");
+
+      // $.ajax({
+      //   type: "POST",
+      //   url: "/getPayouts",
+      //   headers: {
+      //     authorization: `Bearer ${token}`
+      //   }
+      // }).done(function(resp) {
+      //  const {payouts} = JSON.parse(resp);
+      //  if(Object.values(payouts).length===0){
+      //      $("#warn").html("No transactions found");
+      //      $("#totalPayouts").html("₹ 0");
+      //     $("#balance").html("₹ " + earnings);
+      //  }
+      //  else{
+      //  const totalPayouts = Object.values(payouts).reduce(
+      //     (a, b) => a + Number(b.value),
+      //     0
+      //   );
+      //   $("#totalPayouts").html("₹ " + totalPayouts);
+      //   $("#balance").html("₹ " + earnings - totalPayouts);
+      //  }
+      // });
     };
     init();
-
-    function openEdit(id) {
-      const { title, price, link, description } = myLinks[id];
-      $("#title").val(title);
-      $("#secret").val(link);
-      $("#price").val(price);
-      $("#earn").html(0.9*price);
-      $("#editDocID").val(id);
-      $("#description").val(description);
-      $("#editModal").modal("show");
-    }
-    function openDelete(id) {
-      $("#deleteDocID").val(id);
-      $("#deleteModal").modal("show");
-    }
-    function saveEdit() {
-      const title = $("#title").val();
-      const secret = $("#secret").val();
-      const price = $("#price").val();
-      const editDocID = $("#editDocID").val();
-      const description = $("#description").val();
-
-      const data = { title, secret, price, editDocID, description };
-
-      $.ajax({
-        type: "POST",
-        url: "/updateLink",
-        data,
-        headers: {
-          authorization: `Bearer ${token}`
-        }
-      }).done(function(resp) {
-        if (resp === "OK") {
-          window.location.reload();
-        }
-      });
-    }
-    function confirmDelete() {
-      const deleteDocID = $("#deleteDocID").val();
-      $.ajax({
-        type: "POST",
-        url: "/deleteLink",
-        data: { id: deleteDocID },
-        headers: {
-          authorization: `Bearer ${token}`
-        }
-      }).done(function(resp) {
-        if (resp === "OK") {
-          window.location.reload();
-        }
-      });
-    }
   </script>
 </html>
