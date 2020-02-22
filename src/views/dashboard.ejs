@@ -52,6 +52,7 @@
               <h2 id="balance" class="card-title"></h2>
             </div>
           </div>
+          <small>Payment will be made via your preferred method automatically once the pending balance exceeds INR 500.</small>
         </div>
       </div>
       <h4 style="margin-top: 40px;">Profile</h4>
@@ -172,9 +173,9 @@
       if(!method || !phone || !ID){
         $("#warning").css("display","block")
       }
-      $("#totalEarnings").html("₹ " + earnings);
-      $("#totalPayouts").html("₹ " + payouts);
-      $("#balance").html("₹ " + balance);
+      $("#totalEarnings").html("₹ " + parseInt(100*earnings)/100);
+      $("#totalPayouts").html("₹ " + parseInt(100*payouts)/100);
+      $("#balance").html("₹ " + parseInt(100*balance)/100);
       $("#loading").html("");
       $("#profileForm").css("display", "block");
 
