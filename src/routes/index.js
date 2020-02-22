@@ -214,6 +214,25 @@ router.get("/activate", async (req, res) => {
   res.end("Alright!");
 });
 
+router.get("/catalogue/:id", async (req, res) => {
+  const { id } = req.params;
+  const email = id+"@gmail.com";
+  const allLinksRef = admin.firestore()
+  .collection("links")
+  .where("email",'==',email);
+  const allLinks = await allLinksRef.get();
+  const links = [];
+  let name = null;
+  allLinks.forEach(doc => {
+    name = doc.data().name;
+    links.push({
+      uri: doc.id,
+      ...doc.data()
+    })
+  })
+  res.render("catalogue.ejs",{links, name});
+});
+
 router.get("/privacy", function(req, res) {
   res.render("privacy.ejs");
 });

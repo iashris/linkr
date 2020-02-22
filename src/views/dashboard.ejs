@@ -88,6 +88,9 @@
 
         <button id="profileFormSubmit" style="display: none;" type="submit" class="btn btn-primary">Save</button>
       </form>
+
+      <h4 style="margin-top: 40px;">Catalogue</h4>
+      <p>You can access your catalogue at <a href="" id="catid"><span>https://makersgully.com/catalogue/<span id="catalogue"></span></span></a></p>
     
       <!-- <h5 class="topoffset">Payout History</h5>
       <p>You can request a payout when your earnings exceed ₹500</p>
@@ -139,6 +142,8 @@
       }
       const user = JSON.parse(localStorage.getItem("mkid"));
       $("#email").val(user.email);
+      $("#catalogue").html(user.email.split('@')[0]);
+      $("#catid").attr('href','https://makersgully.com/catalogue/'+user.email.split('@')[0]);
       $("#Name").val(user.displayName);
 
       const foo = await firebase
